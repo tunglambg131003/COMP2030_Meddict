@@ -1,0 +1,5 @@
+# Environment file
+MONGODB_PASSWORD=your_mongodb_password
+MONGODB_HOSTNAME=mongodb
+MONGO_INITDB_ROOT_USERNAME: mongodbuser
+MONGO_INITDB_ROOT_PASSWORD: your_mongodb_root_password

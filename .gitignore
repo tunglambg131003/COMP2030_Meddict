@@ -1,0 +1,4 @@
+# Ignore python cache
+__pycache__/ 
+.env
+backend/*.py
