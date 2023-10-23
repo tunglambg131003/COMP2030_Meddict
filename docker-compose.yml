@@ -1,5 +1,5 @@
 # Docker Compose for Flask App with MongoDB and Nginx
-version: '3'
+version: "3.8"
 services:
   # Flask 
   flask:
@@ -14,8 +14,12 @@ services:
       APP_DEBUG: "False"
       APP_PORT: 5000
       MONGODB_DATABASE: "MedDict"
+      MONGODB_USERNAME: "${MONGODB_USERNAME}"
+      MONGODB_PASSWORD: "${MONGODB_PASSWORD}"
+      MONGODB_HOSTNAME: "${MONGODB_HOSTNAME}"
     volumes:
       - appdata:/var/www
+      - ./data/database.json:/data/database.json:ro
     depends_on:
       - mongodb
     networks:
@@ -31,6 +35,8 @@ services:
     env_file: .env
     environment:
       MONGO_INITDB_DATABASE: "MedDict"
+      MONGO_INITDB_ROOT_USERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
       MONGODB_DATA_DIR: /data/db
       MONGODB_LOG_DIR: /dev/null
     volumes:
@@ -40,6 +46,28 @@ services:
       - backend
     ports:
       - '27017-27019:27017-27019'
+
+  mongo-express: 
+    image: mongo-express 
+    container_name: mexpress
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: "${MONGO_INITDB_ROOT_USERNAME}"
+      ME_CONFIG_MONGODB_ADMINPASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
+      # ME_CONFIG_MONGODB_URL: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/?authSource=admin"
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH_USERNAME: mexpress
+      ME_CONFIG_BASICAUTH_PASSWORD: mexpress
+
+    networks:
+      - backend 
+    restart: unless-stopped 
+    depends_on:
+      - mongodb
+    ports: 
+      - 8081:8081
+    volumes:
+      - ./data:/data/db
+
   # Nginx
   webserver:
     image: nginx:latest

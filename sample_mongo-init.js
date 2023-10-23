@@ -10,4 +10,5 @@ db.createUser(
         ]
     }
 );
-db.createCollection("test"); //MongoDB creates the database when you first store data in that database
+
+db.createCollection("dictionary"); //MongoDB creates the database when you first store data in that database
