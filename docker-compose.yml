@@ -19,7 +19,6 @@ services:
       MONGODB_HOSTNAME: "${MONGODB_HOSTNAME}"
     volumes:
       - appdata:/var/www
-      - ./data/database.json:/data/database.json:ro
     depends_on:
       - mongodb
     networks:
@@ -31,7 +30,8 @@ services:
     image: mongo:4.0.8
     container_name: mongodb
     restart: unless-stopped 
-    command: mongod --auth
+    command: mongod --auth 
+    # && mongoimport --host mongodb --db MedDict --collection dictionary --type json --file /data/database.json --jsonArray"
     env_file: .env
     environment:
       MONGO_INITDB_DATABASE: "MedDict"
@@ -40,6 +40,7 @@ services:
       MONGODB_DATA_DIR: /data/db
       MONGODB_LOG_DIR: /dev/null
     volumes:
+      - ./data/database.json:/data/database.json:ro
       - mongodbdata:/data/db 
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:

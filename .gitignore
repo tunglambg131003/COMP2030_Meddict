@@ -1,5 +1,7 @@
 # Ignore python cache
+*.pyc
 __pycache__/ 
 .env
-backend/*.py
 mongo-init.js
+dist/
+build/
