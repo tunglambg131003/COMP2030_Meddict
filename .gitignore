@@ -5,3 +5,4 @@ __pycache__/
 mongo-init.js
 dist/
 build/
+misc/.init.sh
