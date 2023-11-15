@@ -2,6 +2,7 @@ import Google from "../Assets/google.png";
 import Facebook from "../Assets/facebook.png";
 import Github from "../Assets/github.png";
 import "../Styles/LogIn.css"
+import VinUniLogo from "../Assets/favicon.png"
 
 const Login = () => {
   const google = () => {
@@ -17,33 +18,38 @@ const Login = () => {
   };
 
   return (
-    <div className = "Layout">
-    <div className="login">
-      <div className="wrapper">
-        <div className="left">
-          <div className="loginButton google" onClick={google}>
+  <div className = 'login-section'>
+    <div class="main">
+    <img src = {VinUniLogo} class = "VinUniLogo"/>
+        <form action="">
+            <div class="textbox">
+                <input type="text" placeholder="UserName" required/>
+                <i class='bx bxs-user'></i>
+            </div>
+            <div class="textbox">
+                <input type="password" placeholder="Password" required/>
+                <i class='bx bxs-lock-alt'></i>
+            </div>
+
+            <button class="button" type="submit"> LOGIN</button>
+            
+        </form>
+        <div class="txt1 text-center p-t-54 p-b-20">
+        <span>
+         OR  USING
+        </span>
+        </div>
+        <div className="flex-c-m">
+          <a  className="loginButton google" onClick={google}>
             <img src={Google} alt="" className="icon" />
-            Google
-          </div>
-          <div className="loginButton facebook" onClick={facebook}>
+          </a>
+          <a className="loginButton facebook" onClick={facebook}>
             <img src={Facebook} alt="" className="icon" />
-            Facebook
-          </div>
-          <div className="loginButton github" onClick={github}>
+          </a>
+          <a className="loginButton github" onClick={github}>
             <img src={Github} alt="" className="icon" />
-            Github
-          </div>
+          </a>
         </div>
-        <div className="center">
-          <div className="line" />
-          <div className="or">OR</div>
-        </div>
-        <div className="right">
-          <input type="text" placeholder="Username" required/>
-          <input type="password" placeholder="Password" required/>
-          <button className="submit" type = "submit" onclick = "">Login</button>
-        </div>
-      </div>
     </div>
     </div>
   );
