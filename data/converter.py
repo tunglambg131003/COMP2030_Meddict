@@ -7,9 +7,7 @@ import pandas as pd
 df = pd.read_csv('./data/database.csv')
 
 # add columns 'en_sound_location', 'vn_sound_location', 'illustration_link' to df
-df['en_sound_location'] = df['idx'].apply(lambda x: './data/sounds/en/' + str(x) + '.mp3')
-df['vn_sound_location'] = df['idx'].apply(lambda x: './data/sounds/vn/' + str(x) + '.mp3')
-df['illustration_link'] = df['idx'].apply(lambda x: "https://example.com/")
+df["idx"] = df.index + 1
 
 # Convert the DataFrame to a JSON string
 json_str = df.to_json(orient='records')

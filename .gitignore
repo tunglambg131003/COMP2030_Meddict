@@ -6,3 +6,9 @@ mongo-init.js
 dist/
 build/
 misc/.init.sh
+
+
+# node_modules
+node_modules/
+
+data/

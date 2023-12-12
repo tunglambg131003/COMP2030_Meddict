@@ -2,7 +2,7 @@ import os
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_cors import CORS 
-from resources.public import Search, HelloWorld
+from resources.public import Search, HelloWorld, GetImage
 
 # Initialize
 
@@ -14,6 +14,7 @@ CORS(application)
 api = Api(application)
 api.add_resource(Search, '/search')
 api.add_resource(HelloWorld, '/')
+api.add_resource(GetImage, '/image')
 
 if __name__ == "__main__":
     ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", False)

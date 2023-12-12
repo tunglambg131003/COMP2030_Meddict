@@ -1,13 +1,13 @@
 // MedDictionaryComponent.js
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import "../Styles/MeddictSearchBar.css"
 import cam from "../Assets/cam.png"
 import mic from "../Assets/mic.png"
 import glass from "../Assets/glass.png"
-import disease from "../Assets/Hepatitis-B_virions.jpg"
 import sound from "../Assets/sound.png"
 
 const SearchBar = () => {
+  const [imageUrl, setImageUrl] = useState(''); // State variable for storing the image URL
 
   useEffect(() => {
     const searchInput = document.getElementById('searchInput');
@@ -31,11 +31,11 @@ const SearchBar = () => {
   
       try {
         // Section 3: Fetch Suggestions from API
-        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const response = await fetch(encodeURI('http://localhost/search?lang=en&word=' + inputValue));
         const userData = await response.json();
   
         // Section 4: Extract and Filter Suggestions
-        const userNames = userData.map(user => user.name);
+        const userNames = userData.map(user => user.en);
         const filteredSuggestions = userNames.filter(name =>
           name.toLowerCase().startsWith(inputValue.toLowerCase())
         );
@@ -153,12 +153,13 @@ const SearchBar = () => {
       if (inputValue !== '') {
         try {
           // Section 13.1: Fetch user data from the provided URL
-          const response = await fetch('https://jsonplaceholder.typicode.com/users');
+          console.log(encodeURI('http://localhost/search?lang=en&word=' + inputValue));
+          const response = await fetch(encodeURI('http://localhost/search?lang=en&word=' + inputValue));
           const userData = await response.json();
-  
+          console.log(userData);
           // Section 13.2: Find the user with the matching name
-          const matchingUser = userData.find(user => user.name.toLowerCase() === inputValue.toLowerCase());
-  
+          const matchingUser = userData.find(user => user.en.toLowerCase() === inputValue.toLowerCase());
+        
           // Remove 'show' class to enable smooth transition for subsequent searches
           resultContainer.classList.remove('show');
           inputCard.classList.remove('show');
@@ -169,7 +170,7 @@ const SearchBar = () => {
             inputCard.innerHTML = `${inputValue}`;
   
             // Section 13.4: Display the result in the lower card
-            resultCard.innerHTML = `${matchingUser.website}`;
+            resultCard.innerHTML = `${matchingUser.vn}`;
   
             // Show the result box smoothly
             resultContainer.classList.add('show');
@@ -189,7 +190,13 @@ const SearchBar = () => {
             inputCard.classList.add('show');
             resultCard.classList.add('show');
           }
-  
+          fetch(encodeURI('http://localhost/image?id=' + matchingUser.id))
+            .then(response => response.blob())
+            .then(blob => {
+              const imageUrl = URL.createObjectURL(blob);
+              console.log(imageUrl);
+              setImageUrl(imageUrl);
+            });
           // Scroll into view
           resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
   
@@ -264,7 +271,7 @@ const SearchBar = () => {
     </div>
 
     <div class="result-right">
-      <img src={disease} alt="Result" class="result-image"/>
+      <img src={imageUrl} alt="Result" class="result-image"/>
     </div>
   </div>
 
