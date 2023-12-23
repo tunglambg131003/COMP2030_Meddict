@@ -6,7 +6,7 @@ mongo-init.js
 dist/
 build/
 misc/.init.sh
-
+.dbinit.sh
 
 # node_modules
 node_modules/
