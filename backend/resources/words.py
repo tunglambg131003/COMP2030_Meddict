@@ -6,7 +6,7 @@ import resources
 router = APIRouter()
 
 @router.get("/words", tags=["words"], status_code=200)
-def get_words(lang: str, pattern: str | None = Query(default=None, max_length=50)):
+async def get_words(lang: str, pattern: str | None = Query(default=None, max_length=50)):
     '''
     /words API, use for searching words from the dictionary. (Frontend)
     This API will not return queries that have null values.
@@ -27,7 +27,7 @@ def get_words(lang: str, pattern: str | None = Query(default=None, max_length=50
     return results
 
 @router.get("/words/illustration/{id}", tags=["words"], status_code=200)
-def get_illustration_from_id(id: str):
+async def get_illustration_from_id(id: str):
     '''
     /words/illustraion/{id} API, use for searching illustration from the dictionary. (Frontend)
     ''' 

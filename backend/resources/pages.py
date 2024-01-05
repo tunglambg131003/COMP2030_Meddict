@@ -4,7 +4,7 @@ import resources
 router = APIRouter()
 
 @router.get("/pages/{letter}", tags = ["pages"], status_code=200)
-def get_pages(letter: str, page: int = 0):
+async def get_pages(letter: str, page: int = 0):
     if len(letter) != 1 or letter not in "ABCDEFGHIJKLMNOPQRSTUVWXYZ": 
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="letter must be a single UPPERCASE character")
 

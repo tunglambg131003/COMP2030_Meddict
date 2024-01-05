@@ -23,9 +23,9 @@ services:
     depends_on:
       - mongodb
     networks:
-      - frontend
       - backend
-
+    ports: 
+      - 5000:5000
   # MongoDB
   mongodb:
     image: mongo:4.0.8
