@@ -48,6 +48,8 @@ You are done! Access the service at `localhost` via your web browser if you are 
 
 ## 👩‍💻 Development
 
+### `Where is the data?`
+
 Currently, the data for MongoDB is not inserted automatically. You need to insert the data manually by:
 
 1. Access the MongoDB container by running the following command:
@@ -61,6 +63,10 @@ mongoimport --host mongodb --db MedDict --collection dictionary --authentication
 ```
 
 3. To check if the data is inserted correctly, using `mongo-express` by accessing `localhost:8081` via your web browser. The default username & password is `admin` & `password`.
+
+### Where is the endpoints of the API? 
+
+The address of the API is currently `localhost:5000`. Endpoints are mentioned in the [API MedDics-VinUni documentation](https://bump.sh/h114mx001/doc/meddict-vinuni/).
 
 ## 📄 License
  
