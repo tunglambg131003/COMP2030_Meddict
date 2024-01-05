@@ -10,7 +10,6 @@ WORKDIR /var/www/
 ADD . /var/www/
 
 RUN pip install --upgrade pip
-RUN pip install gunicorn
 RUN pip install -r requirements.txt
 
 RUN addgroup --system www
@@ -20,4 +19,4 @@ USER www
 
 EXPOSE 5000
 
-CMD [ "gunicorn", "-w", "4", "--bind", "0.0.0.0:5000", "wsgi" ]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]

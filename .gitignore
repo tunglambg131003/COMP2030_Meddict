@@ -10,5 +10,6 @@ misc/.init.sh
 
 # node_modules
 node_modules/
+_deprecated/
 
 data/

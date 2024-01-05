@@ -1,5 +1,6 @@
-Flask
-flask-restful
+fastapi
 pymongo
 requests
-flask_cors
+uvicorn
+python-multipart
+aiofiles
