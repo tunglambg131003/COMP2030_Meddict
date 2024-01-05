@@ -48,6 +48,20 @@ You are done! Access the service at `localhost` via your web browser if you are 
 
 ## 👩‍💻 Development
 
+Currently, the data for MongoDB is not inserted automatically. You need to insert the data manually by:
+
+1. Access the MongoDB container by running the following command:
+```bash
+docker exec -it mongodb bash
+```
+
+2. In the MongoDB container, run the following command: 
+```bash
+mongoimport --host mongodb --db MedDict --collection dictionary --authenticationDatabase admin --username $MONGO_INITDB_ROOT_USERNAME --password $MONGO_INITDB_ROOT_PASSWORD --type json --file /data/database.json --jsonArray
+```
+
+3. To check if the data is inserted correctly, using `mongo-express` by accessing `localhost:8081` via your web browser. The default username & password is `admin` & `password`.
+
 ## 📄 License
  
 ## 🙏 Acknowledgement 
