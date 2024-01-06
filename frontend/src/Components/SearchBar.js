@@ -31,7 +31,7 @@ const SearchBar = () => {
   
       try {
         // Section 3: Fetch Suggestions from API
-        const response = await fetch(encodeURI('http://localhost/search?lang=en&word=' + inputValue));
+        const response = await fetch(encodeURI('http://api.meddict.com/words?lang=en&pattern=' + inputValue));
         const userData = await response.json();
   
         // Section 4: Extract and Filter Suggestions
@@ -153,8 +153,8 @@ const SearchBar = () => {
       if (inputValue !== '') {
         try {
           // Section 13.1: Fetch user data from the provided URL
-          console.log(encodeURI('http://localhost/search?lang=en&word=' + inputValue));
-          const response = await fetch(encodeURI('http://localhost/search?lang=en&word=' + inputValue));
+          // console.log(encodeURI('http://api.meddict.com/word?lang=en&pattern=' + inputValue));
+          const response = await fetch(encodeURI('http://api.meddict.com/words?lang=en&pattern=' + inputValue));
           const userData = await response.json();
           console.log(userData);
           // Section 13.2: Find the user with the matching name
@@ -190,7 +190,7 @@ const SearchBar = () => {
             inputCard.classList.add('show');
             resultCard.classList.add('show');
           }
-          fetch(encodeURI('http://localhost/image?id=' + matchingUser.id))
+          fetch(encodeURI('http://api.meddict.com/words/illustration/' + matchingUser.id))
             .then(response => response.blob())
             .then(blob => {
               const imageUrl = URL.createObjectURL(blob);
