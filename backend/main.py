@@ -5,8 +5,8 @@ from resources import words, pages
 
 origins = [
     "http://localhost:3000",
-    "http://meddict.com",
-    "http://meddict.com:3000",
+    "http://meddict-vinuni.com",
+    "https://meddict-vinuni.com"
 ]
 
 app = FastAPI()
