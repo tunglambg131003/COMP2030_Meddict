@@ -4,9 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from resources import words, pages
 
 origins = [
-    "http://localhost:3000",
     "http://meddict-vinuni.com",
-    "https://meddict-vinuni.com"
+    "https://meddict-vinuni.com",
+    "http://api.meddict-vinuni.com",
+    "https://api.meddict-vinuni.com"
 ]
 
 app = FastAPI()
