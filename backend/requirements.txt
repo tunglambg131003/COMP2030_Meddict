@@ -4,3 +4,4 @@ requests
 uvicorn
 python-multipart
 aiofiles
+gTTS

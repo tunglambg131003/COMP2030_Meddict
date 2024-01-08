@@ -19,7 +19,8 @@ services:
       MONGODB_HOSTNAME: "${MONGODB_HOSTNAME}"
     volumes:
       - appdata:/var/www
-      - ./data/images:/var/www/images
+      - ./data/images:/var/www/images:rw
+      - ./data/sounds:/var/www/sounds:rw
     depends_on:
       - mongodb
     networks:
