@@ -1,14 +1,14 @@
 // MedDictionaryComponent.js
 import React, { useState, useEffect } from 'react';
 import "../Styles/MeddictSearchBar.css"
-import cam from "../Assets/cam.png"
-import mic from "../Assets/mic.png"
+
 import glass from "../Assets/glass.png"
 import sound from "../Assets/sound.png"
 
 const SearchBar = () => {
   const [imageUrl, setImageUrl] = useState(''); // State variable for storing the image URL
-
+  const [audioUrl, setAudioUrl] = useState('');
+  const [audioUrl_res, setAudioUrl_res] = useState('');
   useEffect(() => {
     const searchInput = document.getElementById('searchInput');
     const suggestionBox = document.getElementById('suggestionBox');
@@ -31,7 +31,7 @@ const SearchBar = () => {
   
       try {
         // Section 3: Fetch Suggestions from API
-        const response = await fetch(encodeURI('http://api.meddict.com/words?lang=en&pattern=' + inputValue));
+        const response = await fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue));
         const userData = await response.json();
   
         // Section 4: Extract and Filter Suggestions
@@ -154,7 +154,7 @@ const SearchBar = () => {
         try {
           // Section 13.1: Fetch user data from the provided URL
           // console.log(encodeURI('http://api.meddict.com/word?lang=en&pattern=' + inputValue));
-          const response = await fetch(encodeURI('http://api.meddict.com/words?lang=en&pattern=' + inputValue));
+          const response = await fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue));
           const userData = await response.json();
           console.log(userData);
           // Section 13.2: Find the user with the matching name
@@ -190,13 +190,31 @@ const SearchBar = () => {
             inputCard.classList.add('show');
             resultCard.classList.add('show');
           }
-          fetch(encodeURI('http://api.meddict.com/words/illustration/' + matchingUser.id))
+          fetch(encodeURI('https://api.meddict-vinuni.com/words/illustration/' + matchingUser.id))
             .then(response => response.blob())
             .then(blob => {
               const imageUrl = URL.createObjectURL(blob);
               console.log(imageUrl);
               setImageUrl(imageUrl);
             });
+          
+          fetch(encodeURI('https://api.meddict-vinuni.com/words/sound/en/' + matchingUser.id))
+            .then((response) => response.blob())
+            .then((blob) => {
+              const audioUrl = URL.createObjectURL(blob);
+              console.log(audioUrl);
+              setAudioUrl(audioUrl);
+            });
+
+            fetch(encodeURI('https://api.meddict-vinuni.com/words/sound/vn/' + matchingUser.id))
+            .then((response) => response.blob())
+            .then((blob) => {
+              const audioUrl_res = URL.createObjectURL(blob);
+              console.log(audioUrl_res);
+              setAudioUrl_res(audioUrl_res);
+            });
+            
+         
           // Scroll into view
           resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
   
@@ -204,12 +222,29 @@ const SearchBar = () => {
           console.error('Error fetching user data:', error);
         }
       }
-  
       suggestionBox.style.display = 'none';
       resetSearchInputStyle();
       selectedSuggestionIndex = -1;
+
+      
+    
     }
+    
   })
+
+  function playAudio() {
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+  }
+
+  function playAudio_res() {
+    if (audioUrl_res) {
+      const audio = new Audio(audioUrl_res);
+      audio.play();
+    }
+  }
 
 
   return (
@@ -224,8 +259,6 @@ const SearchBar = () => {
     <label class="search-wrapper">
       <img src={glass} class="search-icon" alt="Search Icon"/>
       <input type="text" class="placeholder" id="searchInput" placeholder="Search for the antidote to curiosity..."/>
-      <img src={mic} class="mic-icon" alt="Microphone Icon"/>
-      <img src={cam} class="cam-icon" alt="Camera Icon"/>
       <div class="suggestions" id="suggestionBox"></div>
     </label>
   </div>
@@ -244,7 +277,7 @@ const SearchBar = () => {
       <div class="result-upper">
        
         <div class="sound-column">
-          <button class="sound-button">
+          <button class="sound-button" onClick={playAudio}>
             <img src={sound} class="sound-icon" alt="Sound icon"/>
           </button>
         </div>
@@ -259,7 +292,7 @@ const SearchBar = () => {
       <div class="result-lower">
        
         <div class="sound-column">
-          <button class="sound-button">
+          <button class="sound-button" onClick={playAudio_res}>
             <img src={sound} class="sound-icon" alt="Sound icon"/>
           </button>
         </div>
@@ -276,7 +309,10 @@ const SearchBar = () => {
   </div>
 
 </div>
+
+
   );
 };
+
 
 export default SearchBar;
