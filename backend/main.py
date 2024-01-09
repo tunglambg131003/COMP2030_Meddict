@@ -1,14 +1,23 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+import os 
 from resources import words, pages
 
-# origins = [
-#     "http://meddict-vinuni.com",
-#     "https://meddict-vinuni.com",
-#     "http://api.meddict-vinuni.com",
-#     "https://api.meddict-vinuni.com"
-# ]
+# switch origin based on environment
+if os.environ.get('PRODUCTION') == 'development':
+    origins = [
+        "http://localhost:3000",
+        "http://meddict.com",
+        "http://api.meddict.com",
+    ]
+
+if os.environ.get('PRODUCTION') == 'production':
+    origins = [
+        "https://meddict-vinuni.com",
+        "https://www.meddict-vinuni.com",
+        "https://api.meddict-vinuni.com",
+        "https://www.api.meddict-vinuni.com"
+    ]
 
 app = FastAPI()
 
