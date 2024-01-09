@@ -10,7 +10,7 @@
 - [License](#license)
 - [Acknowledgement](#acknowledgement)
 
-## ✨ Features 
+## ✨ Features
 
 ### For end-users
 
@@ -64,8 +64,6 @@ docker exec -it mongodb bash
 mongoimport --host mongodb --db MedDict --collection dictionary --authenticationDatabase admin --username $MONGO_INITDB_ROOT_USERNAME --password $MONGO_INITDB_ROOT_PASSWORD --type json --file /data/database.json --jsonArray
 ```
 
-3. To check if the data is inserted correctly, using `mongo-express` by accessing `localhost:8081` via your web browser. The default username & password is `admin` & `password`.
-
 ### Where is the endpoints of the API? 
 
 The address of the API is currently `localhost:5000`. Endpoints are mentioned in the [API MedDics-VinUni documentation](https://bump.sh/h114mx001/doc/meddict-vinuni/).
@@ -82,5 +80,9 @@ The current development code is using another "pseudo" domain: `meddict.com` for
 ```
 
 ## 📄 License
- 
+
+This project is using MIT License. 
+
 ## 🙏 Acknowledgement 
+
+We want to say thank to COMP2030 - Software Construction's Instructor Team for helping us during the course, as well as Professor Huynh Dinh Chien & Mr. Hoang Mai Duy with their supports during the project. 

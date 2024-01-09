@@ -3,18 +3,18 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from resources import words, pages
 
-origins = [
-    "http://meddict-vinuni.com",
-    "https://meddict-vinuni.com",
-    "http://api.meddict-vinuni.com",
-    "https://api.meddict-vinuni.com"
-]
+# origins = [
+#     "http://meddict-vinuni.com",
+#     "https://meddict-vinuni.com",
+#     "http://api.meddict-vinuni.com",
+#     "https://api.meddict-vinuni.com"
+# ]
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
