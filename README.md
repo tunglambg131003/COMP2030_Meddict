@@ -3,12 +3,12 @@
 **MedDict** is a medical dictionary made by VinUnians for College of Health Sciences (CHS) students & faculties in VinUniversity. The dictionary is curated by Professor Huynh Dinh Chien, faculty of CHS at VinUniversity. 
 
 ## 🔍 Table of contents 
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Development](#development)
-- [License](#license)
-- [Acknowledgement](#acknowledgement)
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Development](#-development)
+- [License](#-license)
+- [Acknowledgement](#-acknowledgement)
 
 ## ✨ Features
 
