@@ -177,7 +177,8 @@ const SearchBar = () => {
       const resultContainer = document.getElementById('resultContainer');
       const inputCard = document.getElementById('inputCard');
       const resultCard = document.getElementById('resultCard');
-  
+      setImageUrl(null);
+
       if (inputValue !== '') {
         try {
           // Section 13.1: Fetch user data from the provided URL
