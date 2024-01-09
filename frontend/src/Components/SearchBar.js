@@ -332,8 +332,14 @@ const SearchBar = () => {
     </div>
 
     <div class="result-right">
-      <img src={imageUrl} alt="Result" class="result-image"/>
+    {imageUrl ? (
+        <img src={imageUrl} alt="Result" class="result-image"/>
+      ) : (
+        <div class="no-image-text">
+          illustration is being updated...
     </div>
+    
+      )}    </div>
   </div>
 
 </div>
