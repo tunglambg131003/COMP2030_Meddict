@@ -9,17 +9,32 @@ const SearchBar = () => {
   const [imageUrl, setImageUrl] = useState(''); // State variable for storing the image URL
   const [audioUrl, setAudioUrl] = useState('');
   const [audioUrl_res, setAudioUrl_res] = useState('');
+  
+  
   useEffect(() => {
     const searchInput = document.getElementById('searchInput');
     const suggestionBox = document.getElementById('suggestionBox');
     const searchButton = document.getElementById('searchButton');
     let selectedSuggestionIndex = -1;
+    let typingTimer; // Timer identifier
+  const doneTypingInterval = 900; // Time in milliseconds (1 second)
+  let isFetchingSuggestions = false;
+    const debounce = (func, delay) => {
+      let timeoutId;
+      return function () {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(context, args), delay);
+      };
+    };
+    
      
    // Add this code to scroll to the top on page reload
    
-
+    
     // Section 2: Input Event Listener
-    searchInput.addEventListener('input', async function () {
+    searchInput.addEventListener('input', debounce(async function () {
       const inputValue = searchInput.value.trim();
   
       // Section 2.1: Handle Empty Input
@@ -28,31 +43,44 @@ const SearchBar = () => {
         resetSearchInputStyle();
         return;
       }
-  
+       if (isFetchingSuggestions) {
+      return;
+    }
+
+    // Clear previous timer
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(async () => {
       try {
         // Section 3: Fetch Suggestions from API
         const response = await fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue));
         const userData = await response.json();
-  
+      
         // Section 4: Extract and Filter Suggestions
         const userNames = userData.map(user => user.en);
         const filteredSuggestions = userNames.filter(name =>
           name.toLowerCase().startsWith(inputValue.toLowerCase())
         );
-  
+      
         // Section 5: Display Suggestions
         displaySuggestions(filteredSuggestions);
-  
+      
         // Section 6: Show/Hide Suggestions Box
         suggestionBox.style.display = filteredSuggestions.length > 0 ? 'block' : 'none';
         selectedSuggestionIndex = -1;
         highlightSelectedSuggestion();
         adjustSearchInputStyle(filteredSuggestions.length > 0);
-  
+      
       } catch (error) {
         console.error('Error fetching suggestions:', error);
+      }finally {
+        // Reset the flag when suggestions fetching is complete
+        isFetchingSuggestions = false;
       }
-    });
+      }, doneTypingInterval);
+      
+      
+    },500));
+    
   
     // Section 7: Style Adjustment Functions
     function adjustSearchInputStyle(hasSuggestions) {
@@ -227,10 +255,10 @@ const SearchBar = () => {
       selectedSuggestionIndex = -1;
 
       
-    
+
     }
     
-  })
+  });
 
   function playAudio() {
     if (audioUrl) {
@@ -316,3 +344,4 @@ const SearchBar = () => {
 
 
 export default SearchBar;
+
