@@ -282,6 +282,15 @@ body {
   border-radius: 0 20px 20px 0;
 }
 
+.no-image-text{
+  color: white;
+  text-align: center;
+  font-family: Montserrat, sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 60px;
+}
+
 .line {
   width: 70%;
   height: 1px;
