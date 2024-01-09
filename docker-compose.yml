@@ -60,22 +60,32 @@ services:
       - backend
     ports:
       - '27017-27019:27017-27019'
-
+      
   # Nginx
   webserver:
     image: nginx:latest
     container_name: webserver
+    restart: always
     volumes:
       - ./nginx/${PRODUCTION}.conf:/tmp/nginx.conf
+      - ./nginx/app.conf:/tmp/nginx.conf:ro
+      - ./certbot/conf/live/meddict-vinuni.com/fullchain.pem:/certificates/fullchain.pem:ro
+      - ./certbot/conf/live/meddict-vinuni.com/privkey.pem:/certificates/privkey.pem:ro
     command: /bin/sh -c "envsubst < /tmp/nginx.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'" 
     ports:
       - 80:80
-      - 433:433
+      - 443:443
     depends_on:
       - api
     networks:
       - frontend
       - backend
+
+  certbot:
+    image: certbot/certbot:latest 
+    volumes: 
+      - ./certbot/www/:/var/www/certbot:rw 
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
 networks:
   frontend:

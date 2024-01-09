@@ -181,7 +181,6 @@ const SearchBar = () => {
       if (inputValue !== '') {
         try {
           // Section 13.1: Fetch user data from the provided URL
-          // console.log(encodeURI('http://api.meddict.com/word?lang=en&pattern=' + inputValue));
           const response = await fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue));
           const userData = await response.json();
           console.log(userData);
