@@ -6,7 +6,7 @@ WORKDIR /var/www/
 
 ADD . /var/www/
 
-RUN pip install --upgrade pip
+# RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 EXPOSE 5000

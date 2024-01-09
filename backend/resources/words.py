@@ -71,7 +71,7 @@ async def get_sound_from_id(lang: str, id: int):
         # check if entry[_id]_vn.mp3 exists
         file_path = f"/var/www/sounds/{entry['_id']}_vn.mp3"
         if not path.exists(file_path):
-            tts = gtts.gTTS(entry["vn"], lang="vn", slow=True)
+            tts = gtts.gTTS(entry["vn"], lang="vi", slow=True)
             tts.save(file_path)
         file_response = FileResponse(file_path)
     return file_response

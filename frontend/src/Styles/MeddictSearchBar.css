@@ -150,6 +150,8 @@ body {
   opacity: 0.4;
 }
 
+/* MeddictSearchBar.css */
+
 .suggestions {
   position: absolute;
   top: 100%;
@@ -163,6 +165,8 @@ body {
   z-index: 1;
   padding-bottom: 20px;
   font-size: 19px;
+  overflow-y: auto;
+  max-height: 350px;
 }
 
 .suggestion {
@@ -170,6 +174,34 @@ body {
   text-align: left;
   padding: 10px 10px 10px 47px;
   transition: background-color 0.3s;
+  overflow-y: auto;
+}
+
+
+.suggestions::-webkit-scrollbar-thumb {
+  background-color: auto; /* Set your desired scrollbar thumb color */
+  border-radius: 6px; /* Set your desired scrollbar thumb border radius */
+  top: 100%;
+  left: 0;
+  right: 0;
+  border-style: none;
+  border-radius: 0 0 22px 22px;
+  display: none;
+  z-index: 1;
+  padding-bottom: 20px;
+}
+
+.suggestions::-webkit-scrollbar-track {
+  background-color: white; /* Set your desired scrollbar track color */
+  border-radius: '6px'; /* Set your desired scrollbar track border radius */
+  top: 100%;
+  left: 0;
+  right: 0;
+  border-style: none;
+  border-radius: 0 0 22px 22px;
+  display: none;
+  z-index: 1;
+  padding-bottom: 20px;
 }
 
 .suggestion:hover {
@@ -248,6 +280,15 @@ body {
   object-fit: cover;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
   border-radius: 0 20px 20px 0;
+}
+
+.no-image-text{
+  color: white;
+  text-align: center;
+  font-family: Montserrat, sans-serif;
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 60px;
 }
 
 .line {
