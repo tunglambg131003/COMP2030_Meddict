@@ -104,14 +104,6 @@ const SearchBar = () => {
         performSearch();
       }
 
-      else if (event.key === "Backspace"){
-        suggestionBox.style.display = 'none';
-        resetSearchInputStyle();
-        selectedSuggestionIndex = -1;
-        searchInput.value = null; 
-        return; 
-       }
-
 
       highlightSelectedSuggestion();
     });
