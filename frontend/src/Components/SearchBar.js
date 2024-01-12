@@ -16,6 +16,7 @@ const SearchBar = () => {
   
   useEffect(() => {
     const searchButton = document.getElementById('searchButton');
+    const suggestionBox = document.getElementById('suggestionBox');
     let selectedSuggestionIndex = -1;
     const searchInput = document.getElementById('searchInput');  
     const doneTypingInterval = 1000; // Adjust this interval as needed
@@ -56,14 +57,6 @@ const SearchBar = () => {
     searchInput.addEventListener('input', inputEventListener);
 
     
-    
-  
-   
-      // Cleanup: Remove the event listener when the component unmounts
-   
-
-
-
   
     // Section 7: Style Adjustment Functions
     function adjustSearchInputStyle(hasSuggestions) {
@@ -176,6 +169,7 @@ const SearchBar = () => {
     // Section 12: Click Event Listener for Search Button
     searchButton.addEventListener('click', function () {
       performSearch();
+      
     });
   
     // Section 13: Perform Search Function
@@ -268,7 +262,9 @@ const SearchBar = () => {
           
         
       }
-
+      suggestionBox.style.display = 'none';
+      resetSearchInputStyle();
+      selectedSuggestionIndex = -1;
 
     }
     
