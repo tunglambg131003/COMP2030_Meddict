@@ -17,7 +17,7 @@ async def get_words(lang: str, pattern: str | None = Query(default=None, max_len
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="lang must be either 'en' or 'vn'") 
     results = []
     pat = f".*{pattern}.*"
-    query = {f"{lang}": {"$regex": pat}}
+    query = {f"{lang}": {"$regex": pat, "$options": "i"}}
     entries = resources.dictionary_collection.find(query, {"_id": 0})
     for entry in entries:
         if lang == "en":
