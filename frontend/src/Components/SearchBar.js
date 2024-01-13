@@ -1,85 +1,61 @@
 // MedDictionaryComponent.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import "../Styles/MeddictSearchBar.css"
 
 import glass from "../Assets/glass.png"
 import sound from "../Assets/sound.png"
 
 const SearchBar = () => {
+
   const [imageUrl, setImageUrl] = useState(''); // State variable for storing the image URL
   const [audioUrl, setAudioUrl] = useState('');
   const [audioUrl_res, setAudioUrl_res] = useState('');
-  
+  const typingTimerRef = useRef(null);
+  const showTimeRef = useRef(null);
+
   
   useEffect(() => {
-    const searchInput = document.getElementById('searchInput');
-    const suggestionBox = document.getElementById('suggestionBox');
     const searchButton = document.getElementById('searchButton');
+    const suggestionBox = document.getElementById('suggestionBox');
     let selectedSuggestionIndex = -1;
-    let typingTimer; // Timer identifier
-  const doneTypingInterval = 900; // Time in milliseconds (1 second)
-  let isFetchingSuggestions = false;
-    const debounce = (func, delay) => {
-      let timeoutId;
-      return function () {
-        const context = this;
-        const args = arguments;
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => func.apply(context, args), delay);
-      };
-    };
+    const searchInput = document.getElementById('searchInput');  
+    const doneTypingInterval = 1000; // Adjust this interval as needed
     
-     
-   // Add this code to scroll to the top on page reload
-   
-    
-    // Section 2: Input Event Listener
-    searchInput.addEventListener('input', debounce(async function () {
+    const inputEventListener = function () {
+      clearTimeout(typingTimerRef.current);
       const inputValue = searchInput.value.trim();
-  
-      // Section 2.1: Handle Empty Input
-      if (inputValue === '') {
-        suggestionBox.style.display = 'none';
-        resetSearchInputStyle();
-        return;
-      }
-       if (isFetchingSuggestions) {
-      return;
-    }
 
-    // Clear previous timer
-    clearTimeout(typingTimer);
-    typingTimer = setTimeout(async () => {
-      try {
-        // Section 3: Fetch Suggestions from API
-        const response = await fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue));
-        const userData = await response.json();
       
-        // Section 4: Extract and Filter Suggestions
-        const userNames = userData.map(user => user.en);
-        const filteredSuggestions = userNames.filter(name =>
-          name.toLowerCase().startsWith(inputValue.toLowerCase())
-        );
-      
-        // Section 5: Display Suggestions
-        displaySuggestions(filteredSuggestions);
-      
-        // Section 6: Show/Hide Suggestions Box
-        suggestionBox.style.display = filteredSuggestions.length > 0 ? 'block' : 'none';
-        selectedSuggestionIndex = -1;
-        highlightSelectedSuggestion();
-        adjustSearchInputStyle(filteredSuggestions.length > 0);
-      
-      } catch (error) {
-        console.error('Error fetching suggestions:', error);
-      }finally {
-        // Reset the flag when suggestions fetching is complete
-        isFetchingSuggestions = false;
-      }
+      typingTimerRef.current = setTimeout(async () => {
+        const suggestionBox = document.getElementById('suggestionBox');
+
+        if (inputValue.length === 0) {
+          suggestionBox.style.display = 'none';
+          resetSearchInputStyle();
+          return;
+        }
+
+        try {
+          const response = await fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue));
+          const userData = await response.json();
+          const filteredSuggestions = userData
+        .filter(user => user.en.toLowerCase().startsWith(inputValue.toLowerCase()))
+        .map(user => user.en);
+    
+          console.log(filteredSuggestions);
+          displaySuggestions(filteredSuggestions);
+          suggestionBox.style.display = filteredSuggestions.length > 0 ? 'block' : 'none';
+          adjustSearchInputStyle(filteredSuggestions.length > 0);
+        } catch (error) {
+          // Handle errors
+          console.error('Error fetching suggestions:', error);
+        }
       }, doneTypingInterval);
-      
-      
-    },500));
+
+    };
+
+    searchInput.addEventListener('input', inputEventListener);
+
     
   
     // Section 7: Style Adjustment Functions
@@ -98,7 +74,8 @@ const SearchBar = () => {
     // Section 8: Keyboard Events
     searchInput.addEventListener('keydown', function (event) {
       const suggestions = document.querySelectorAll('.suggestions .suggestion');
-  
+      const suggestionBox = document.getElementById('suggestionBox');
+
       if (event.key === 'ArrowUp') {
         if (selectedSuggestionIndex > 0) {
           selectedSuggestionIndex--;
@@ -113,33 +90,40 @@ const SearchBar = () => {
           // If at the last suggestion, loop to the first one
           selectedSuggestionIndex = 0;
         }
-      } else if (event.key === 'Enter') {
+      } 
+      else if (event.key === 'Enter') {
         event.preventDefault();
   
         if (selectedSuggestionIndex !== -1) {
           // If a suggestion is selected, use it
           searchInput.value = suggestions[selectedSuggestionIndex].textContent;
+
         }
   
         // Trigger the search
         performSearch();
       }
-  
+
+
       highlightSelectedSuggestion();
     });
   
     // Section 9: Hide Suggestions Box on Click Outside
-    document.addEventListener('click', function (event) {
+    document.addEventListener('click', async function (event) {
+      const suggestionBox = document.getElementById('suggestionBox');
+
       if (!searchInput.contains(event.target) && !suggestionBox.contains(event.target)) {
         suggestionBox.style.display = 'none';
         resetSearchInputStyle();
+        selectedSuggestionIndex = -1;
       }
+
     });
   
     // Section 10: Highlight Selected Suggestion
-    function highlightSelectedSuggestion() {
+    async function highlightSelectedSuggestion() {
       const suggestions = document.querySelectorAll('.suggestions .suggestion');
-      suggestions.forEach((suggestion, index) => {
+      await suggestions.forEach((suggestion, index) => {
         if (index === selectedSuggestionIndex) {
           suggestion.classList.add('selected');
           // Update the input value with the selected suggestion
@@ -149,26 +133,35 @@ const SearchBar = () => {
         }
       });
     }
+    
+    
   
     // Section 11: Display Suggestions Function
-    function displaySuggestions(filteredSuggestions) {
+    async function displaySuggestions(filteredSuggestions) {
+      const suggestionBox = document.getElementById('suggestionBox');
       suggestionBox.innerHTML = '';
-      filteredSuggestions.forEach((suggestion, index) => {
+
+      for (let index = 0; index < filteredSuggestions.length && index < 10; index++) {
+        const suggestion = filteredSuggestions[index];
+
         const suggestionItem = document.createElement('div');
         suggestionItem.classList.add('suggestion');
         suggestionItem.textContent = suggestion;
+    
         suggestionItem.addEventListener('click', function () {
-          searchInput.value = suggestion;
+          searchInput.value = suggestion
           suggestionBox.style.display = 'none';
           resetSearchInputStyle();
         });
+    
         suggestionBox.appendChild(suggestionItem);
-      });
+      }
     }
   
     // Section 12: Click Event Listener for Search Button
     searchButton.addEventListener('click', function () {
       performSearch();
+      
     });
   
     // Section 13: Perform Search Function
@@ -177,84 +170,93 @@ const SearchBar = () => {
       const resultContainer = document.getElementById('resultContainer');
       const inputCard = document.getElementById('inputCard');
       const resultCard = document.getElementById('resultCard');
+      const interval = 1000; 
       setImageUrl(null);
-
-      if (inputValue !== '') {
-        try {
-          // Section 13.1: Fetch user data from the provided URL
-          const response = await fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue));
-          const userData = await response.json();
-          console.log(userData);
-          // Section 13.2: Find the user with the matching name
+      if (inputValue !== null) {
+        clearTimeout(showTimeRef.current)
+        showTimeRef.current = setTimeout(() => {fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue))
+        .then(async (response) => {
+          const userData = response.json();
+          return userData;
+        })
+        .then(async (userData) => {
           const matchingUser = userData.find(user => user.en.toLowerCase() === inputValue.toLowerCase());
+          return matchingUser;
+        })
+       
+        .then(async(matchingUser) => {resultContainer.classList.remove('show');
+        inputCard.classList.remove('show');
+        resultCard.classList.remove('show');
+
+        if (matchingUser) {
+          // Section 13.3: Display the input in the upper card
+          inputCard.innerHTML = `${inputValue}`;
+
+          // Section 13.4: Display the result in the lower card
+          resultCard.innerHTML = `${matchingUser.vn}`;
+
+          // Show the result box smoothly
+          resultContainer.classList.add('show');
+
+          // Show the result cards smoothly
+          inputCard.classList.add('show');
+          resultCard.classList.add('show');
+        } else {
+          // Section 13.5: If no matching user is found
+          inputCard.innerHTML = `${inputValue}`;
+          resultCard.innerHTML = `No translation found for: ${inputValue}`;
+
+          // Show the result box smoothly
+          resultContainer.classList.add('show');
+
+          // Show the result cards smoothly
+          inputCard.classList.add('show');
+          resultCard.classList.add('show');
+        }
+        
+        fetch(encodeURI('https://api.meddict-vinuni.com/words/illustration/' + matchingUser.id))
+          .then(response => response.blob())
+          .then(blob => {
+            const imageUrl = URL.createObjectURL(blob);
+            console.log(imageUrl);
+            setImageUrl(imageUrl);
+          });
+
+
+        
+        fetch(encodeURI('https://api.meddict-vinuni.com/words/sound/en/' + matchingUser.id))
+          .then((response) => response.blob())
+          .then((blob) => {
+            const audioUrl = URL.createObjectURL(blob);
+            console.log(audioUrl);
+            setAudioUrl(audioUrl);
+          });
+
+          fetch(encodeURI('https://api.meddict-vinuni.com/words/sound/vn/' + matchingUser.id))
+          .then((response) => response.blob())
+          .then((blob) => {
+            const audioUrl_res = URL.createObjectURL(blob);
+            console.log(audioUrl_res);
+            setAudioUrl_res(audioUrl_res);
+          });
+          
+       
+        // Scroll into view
+        resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    })}, interval)
+
+        
+          // Section 13.1: Fetch user data from the provided URL
+          // Section 13.2: Find the user with the matching name
+            // const matchingUser = userData.find(user => user.en.toLowerCase() === inputValue.toLowerCase());
         
           // Remove 'show' class to enable smooth transition for subsequent searches
-          resultContainer.classList.remove('show');
-          inputCard.classList.remove('show');
-          resultCard.classList.remove('show');
-  
-          if (matchingUser) {
-            // Section 13.3: Display the input in the upper card
-            inputCard.innerHTML = `${inputValue}`;
-  
-            // Section 13.4: Display the result in the lower card
-            resultCard.innerHTML = `${matchingUser.vn}`;
-  
-            // Show the result box smoothly
-            resultContainer.classList.add('show');
-  
-            // Show the result cards smoothly
-            inputCard.classList.add('show');
-            resultCard.classList.add('show');
-          } else {
-            // Section 13.5: If no matching user is found
-            inputCard.innerHTML = `${inputValue}`;
-            resultCard.innerHTML = `No translation found for: ${inputValue}`;
-  
-            // Show the result box smoothly
-            resultContainer.classList.add('show');
-  
-            // Show the result cards smoothly
-            inputCard.classList.add('show');
-            resultCard.classList.add('show');
-          }
-          fetch(encodeURI('https://api.meddict-vinuni.com/words/illustration/' + matchingUser.id))
-            .then(response => response.blob())
-            .then(blob => {
-              const imageUrl = URL.createObjectURL(blob);
-              console.log(imageUrl);
-              setImageUrl(imageUrl);
-            });
           
-          fetch(encodeURI('https://api.meddict-vinuni.com/words/sound/en/' + matchingUser.id))
-            .then((response) => response.blob())
-            .then((blob) => {
-              const audioUrl = URL.createObjectURL(blob);
-              console.log(audioUrl);
-              setAudioUrl(audioUrl);
-            });
-
-            fetch(encodeURI('https://api.meddict-vinuni.com/words/sound/vn/' + matchingUser.id))
-            .then((response) => response.blob())
-            .then((blob) => {
-              const audioUrl_res = URL.createObjectURL(blob);
-              console.log(audioUrl_res);
-              setAudioUrl_res(audioUrl_res);
-            });
-            
-         
-          // Scroll into view
-          resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
+        
       }
       suggestionBox.style.display = 'none';
       resetSearchInputStyle();
       selectedSuggestionIndex = -1;
-
-      
 
     }
     
@@ -274,6 +276,7 @@ const SearchBar = () => {
     }
   }
 
+  
 
   return (
     <div class="layout">
@@ -350,4 +353,3 @@ const SearchBar = () => {
 
 
 export default SearchBar;
-

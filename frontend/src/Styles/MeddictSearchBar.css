@@ -173,7 +173,7 @@ body {
   cursor: pointer;
   text-align: left;
   padding: 10px 10px 10px 47px;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease;
   overflow-y: auto;
 }
 
@@ -206,10 +206,13 @@ body {
 
 .suggestion:hover {
   background-color: #d3d3d3;
+  transition: background-color 0.2s ease;
+
 }
 
 .suggestion.selected {
   background-color: #d3d3d3;
+
 }
 
 .result-container {
