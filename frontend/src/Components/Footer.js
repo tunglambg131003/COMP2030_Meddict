@@ -3,12 +3,15 @@ import "../Styles/Footer.css";
 import Footer_Logo from "../Assets/Footer_Logo.png"
 import { Link } from "react-router-dom";
 import { FaFacebookF, FaYoutube, FaEnvelope } from "react-icons/fa";
+import { useTranslation } from 'react-i18next'
 
 export function FooterText({text}) {
   return <span>{text}</span>;
 }
 
 function Footer() {
+  const { t } = useTranslation();
+
   return (
     <div className="footer-section">
       <div className="footer-container">
@@ -19,35 +22,35 @@ function Footer() {
         </div>
 
         <div className="ft-list">
-          <p className="ft-list-title">School, Program Office</p>
+          <p className="ft-list-title">{t("School")}</p>
           <ul className="ft-list-items">
             <li>
-              <a href="https://vinuni.edu.vn/college-of-arts-and-sciences/">College of Art and Sciences</a>
+              <a href="https://vinuni.edu.vn/college-of-arts-and-sciences/">{t("CAS")}</a>
             </li>
             <li>
-              <a href="https://vinuni.edu.vn/college-of-business-management/">College of Business & Management</a>
+              <a href="https://vinuni.edu.vn/college-of-business-management/">{t("CBM")}</a>
             </li>
             <li>
-              <a href="https://vinuni.edu.vn/college-of-engineering-computer-science/">College of Engineering & Computer Science</a>
+              <a href="https://vinuni.edu.vn/college-of-engineering-computer-science/">{t("CECS")}</a>
             </li>
             <li>
-              <a href="https://vinuni.edu.vn/college-of-health-sciences/">College of Health Sciences</a>
+              <a href="https://vinuni.edu.vn/college-of-health-sciences/">{t("CHS")}</a>
             </li>
 
           </ul>
         </div>
 
         <div className="ft-list">
-          <p className="ft-list-title">FAQ</p>
+          <p className="ft-list-title">{t("FAQ")}</p>
           <ul className="ft-list-items">
             <li>
-              <Link to={"https://vinuni.edu.vn/contact/"}>Contact us </Link>
+              <Link to={"https://vinuni.edu.vn/contact/"}>{t("Contact us")} </Link>
             </li>
             <li>
-              <Link to={"https://library.vinuni.edu.vn/"}>Library</Link>
+              <Link to={"https://library.vinuni.edu.vn/"}>{t("Library")}</Link>
             </li>
             <li>
-              <Link to={"https://vinuni.edu.vn/visit/"}>Campus Map</Link>
+              <Link to={"https://vinuni.edu.vn/visit/"}>{t("Campus map")}</Link>
             </li>
             
             
@@ -55,7 +58,7 @@ function Footer() {
         </div>
 
         <div className="ft-list" id="contact">
-          <p className="ft-list-title">Administrator</p>
+          <p className="ft-list-title">{t("Administrations")}</p>
           <ul className="ft-list-items">
             
             <li>
