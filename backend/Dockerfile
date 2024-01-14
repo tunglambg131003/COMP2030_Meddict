@@ -4,10 +4,12 @@ LABEL MAINTAINER="Tuan-Anh Nguyen <21anh.nt@vinuni.edu.vn>"
 
 WORKDIR /var/www/
 
-ADD . /var/www/
+ADD ./requirements.txt /var/www/
 
 # RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+RUN --mount=type=cache,target=/root/.cache/pip pip install -r requirements.txt
+
+ADD . /var/www/
 
 EXPOSE 5000
 

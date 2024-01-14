@@ -1,12 +1,11 @@
 FROM node:18-alpine 
 
+ADD package.json /var/www/package.json
+ADD package-lock.json /var/www/package-lock.json
+
+RUN cd /var/www/ && npm install --force
+
 WORKDIR /var/www/
-
-COPY package.json /var/www/
-COPY package-lock.json /var/www/
-
-RUN npm install --force
-
 COPY public/ /var/www/public/
 COPY src/ /var/www/src/
 

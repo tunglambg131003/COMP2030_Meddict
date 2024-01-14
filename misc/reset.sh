@@ -2,8 +2,6 @@
 echo "Resetting docker containers"
 # sudo systemctl restart docker 
 # remove all containers
-docker compose stop
-docker compose rm
-docker volume rm $(docker volume ls -q) -f
+docker compose down
 # build and run
 docker compose up --build -d
