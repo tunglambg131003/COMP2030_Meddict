@@ -21,7 +21,7 @@
     width: 50%;
 }
 .about-title {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 40px;
     font-weight: bold;
 }
@@ -49,7 +49,7 @@
 .about-text-title {
     margin: 0 0 24px 0;
     color: #4d4b4b;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 24px;
     font-weight: bold;
     letter-spacing: .7px;
@@ -59,7 +59,7 @@
     margin: 16px 0;
 }
 .about-text-sTitle {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 18px;
     font-weight: bold;
     letter-spacing: .7px;
