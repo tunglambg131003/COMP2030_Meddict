@@ -8,11 +8,13 @@ from os import path
 router = APIRouter()
 
 @router.get("/words", tags=["words"], status_code=200)
-async def get_words(lang: str, pattern: str | None = Query(default=None, max_length=50)):
+async def get_words(lang: str, pattern: str | None = Query(default=None, max_length=100, min_length=1)):
     '''
     /words API, use for searching words from the dictionary. (Frontend)
     This API will not return queries that have null values.
     '''
+    pattern = pattern.replace("(", "\(")
+    pattern = pattern.replace(")", "\)")
     if lang != "en" and lang != "vn":
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="lang must be either 'en' or 'vn'") 
     results = []
