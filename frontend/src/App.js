@@ -19,7 +19,7 @@ function App() {
   };
   useEffect(() => {
     const onPageScroll = () => {
-      if (window.scrollY > 200) {
+      if (window.scrollY > 100) {
         setGoUp(true);
       } else {
         setGoUp(false);
