@@ -53,8 +53,9 @@ services:
       MONGODB_DATA_DIR: /data/db
       MONGODB_LOG_DIR: /dev/null
     volumes:
+      - mongodbdata:/data/db
+      - mongoconfigdb:/data/configdb
       - ./data/database.json:/data/database.json:ro
-      - mongodbdata:/data/db 
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - backend
@@ -97,6 +98,8 @@ networks:
 volumes:
   mongodbdata:
     driver: local 
+  mongoconfigdb:
+    driver: local
   appdata:
     driver: local 
   nginx: 
