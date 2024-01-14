@@ -3,24 +3,26 @@ import DoctorCard from "../Components/DoctorCard";
 import Chien from "../Assets/Prof.Chien.jpeg"
 import Duy from "../Assets/Mr.Duy.jpeg"
 import "../Styles/Contact.css";
+import { useTranslation } from 'react-i18next'
 
 function Contact() {
+  const { t } = useTranslation();
+
   return (
     <div className="doctor-section" id="doctors">
       <div className="dt-title-content">
         <h3 className="dt-title">
-          <span>Meet Our Experts</span>
+          <span>{t("Experts")}</span>
         </h3>
 
         <p className="dt-description">
-        Meet our exceptional team of specialist doctors, dedicated to providing top-notch medical terms at Medical Dictionary. Trust in their knowledge and experience to lead you towards a horizon. 
-        </p>
+        {t("Description")}        </p>
       </div>
 
       <div className="dt-cards-content">
         <DoctorCard
           img={Chien}
-          name="Prof. Huynh Dinh Chien"
+          name="Dr. Huynh Dinh Chien"
           phone="+ 84 9035 80518"
           mail = "chien.hd@vinuni.edu.vn"
   
