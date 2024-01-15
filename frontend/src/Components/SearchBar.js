@@ -43,6 +43,7 @@ const SearchBar = () => {
           const filteredSuggestions = userData
         .filter(user => user.en.toLowerCase().startsWith(inputValue.toLowerCase()))
         .map(user => user.en);
+          console.log(userData.length)
           displaySuggestions(filteredSuggestions);
           suggestionBox.style.display = filteredSuggestions.length > 0 ? 'block' : 'none';
           adjustSearchInputStyle(filteredSuggestions.length > 0);}
@@ -177,7 +178,7 @@ const SearchBar = () => {
       const interval = 1000; 
       const lang =  t("lang");
       setImageUrl(null);
-      if (inputValue !== null) {
+      if (inputValue.length !== 0) {
         clearTimeout(showTimeRef.current)
         if (lang === "en"){showTimeRef.current = setTimeout(() => {
           fetch(encodeURI('https://api.meddict-vinuni.com/words?lang=en&pattern=' + inputValue))
@@ -193,7 +194,7 @@ const SearchBar = () => {
         .then(async(matchingUser) => {resultContainer.classList.remove('show');
         inputCard.classList.remove('show');
         resultCard.classList.remove('show');
-
+        
         if (matchingUser) {
           // Section 13.3: Display the input in the upper card
           inputCard.innerHTML = `${inputValue}`;
@@ -208,24 +209,7 @@ const SearchBar = () => {
           inputCard.classList.add('show');
           resultCard.classList.add('show');
 
-          
-
-        } else {
-          // Section 13.5: If no matching user is found
-          inputCard.innerHTML = `${inputValue}`;
-          resultCard.innerHTML = `No translation found for: ${inputValue}`;
-
-          // Show the result box smoothly
-          resultContainer.classList.add('show');
-
-          // Show the result cards smoothly
-          inputCard.classList.add('show');
-          resultCard.classList.add('show');
-        }
-        
-       
-       
-        fetch(encodeURI('https://api.meddict-vinuni.com/words/illustration/' + matchingUser.id))
+          fetch(encodeURI('https://api.meddict-vinuni.com/words/illustration/' + matchingUser.id))
         .then(response => response.blob())
         .then(blob => {
           const imageUrl = URL.createObjectURL(blob);
@@ -248,8 +232,25 @@ const SearchBar = () => {
             console.log(audioUrl_res);
             setAudioUrl_res(audioUrl_res);
           });
+
           
+
+        } else {
+          // Section 13.5: If no matching user is found
+          inputCard.innerHTML = `${inputValue}`;
+          resultCard.innerHTML = `No translation found for: ${inputValue}`;
+
+          // Show the result box smoothly
+          resultContainer.classList.add('show');
+
+          // Show the result cards smoothly
+          inputCard.classList.add('show');
+          resultCard.classList.add('show');
+        }
+        
        
+       
+  
         // Scroll into view
         resultContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
     })}, interval)}
@@ -283,26 +284,8 @@ const SearchBar = () => {
         // Show the result cards smoothly
         inputCard.classList.add('show');
         resultCard.classList.add('show');
-
         
 
-      } else {
-        // Section 13.5: If no matching user is found
-        inputCard.innerHTML = `${inputValue}`;
-        resultCard.innerHTML = `No translation found for: ${inputValue}`;
-
-        // Show the result box smoothly
-        resultContainer.classList.add('show');
-
-        // Show the result cards smoothly
-        inputCard.classList.add('show');
-        resultCard.classList.add('show');
-      }
-      
-     
-
-      
-      
         fetch(encodeURI('https://api.meddict-vinuni.com/words/illustration/' + matchingUser.id))
         .then(response => response.blob())
         .then(blob => {
@@ -326,6 +309,25 @@ const SearchBar = () => {
           console.log(audioUrl_res);
           setAudioUrl_res(audioUrl_res);
         });
+        
+
+      } else {
+        // Section 13.5: If no matching user is found
+        inputCard.innerHTML = `${inputValue}`;
+        resultCard.innerHTML = `No translation found for: ${inputValue}`;
+
+        // Show the result box smoothly
+        resultContainer.classList.add('show');
+
+        // Show the result cards smoothly
+        inputCard.classList.add('show');
+        resultCard.classList.add('show');
+      }
+      
+     
+
+      
+      
         
      
       // Scroll into view
