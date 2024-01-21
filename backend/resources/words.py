@@ -1,9 +1,35 @@
-from fastapi import APIRouter, Query, status, HTTPException
+from fastapi import APIRouter, Query, status, HTTPException, Depends
 from fastapi.responses import FileResponse
+from fastapi.security import OAuth2PasswordBearer
 import glob
-import resources
+from resources import dictionary_collection, users_collection, suggestions_collection
 import gtts
-from os import path
+from os import path, environ
+from bson import ObjectId
+from pydantic import BaseModel 
+from json import loads
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+def api_key_auth(api_key: str = Depends(oauth2_scheme)):
+    if api_key != environ["API_KEY"]:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid api key")
+
+class WordSuggestion(BaseModel):
+    suggestion: str
+    lang: str
+
+def schema(id: ObjectId, en: str, vn: str, en_type: str, vn_type: str):
+    '''
+    Schema for words
+    '''
+    return {
+        "id": str(id),
+        "en": en,
+        "vn": vn,
+        "en_type": en_type,
+        "vn_type": vn_type
+    }
 
 router = APIRouter()
 
@@ -19,15 +45,22 @@ async def get_words(lang: str, pattern: str | None = Query(default=None, max_len
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="lang must be either 'en' or 'vn'") 
     results = []
     pat = f".*{pattern}.*"
-    query = {f"{lang}": {"$regex": pat, "$options": "i"}}
-    entries = resources.dictionary_collection.find(query, {"_id": 0})
+    # entries = resources.dictionary_collection.find(query, limit=10).sort([(f"{lang}", 1)])
+    # replace _id -> id for frontend
+    entries = dictionary_collection.aggregate([
+        {"$match": {f"{lang}": {"$regex": pat, "$options": "i"}}},
+        {"$project": {"_id": 0, "id": "$_id", "en": 1, "vn": 1, "en_type": 1, "vn_type": 1}},
+        {"$sort": {f"{lang}": 1}},
+        {"$limit": 10}
+    ])
+    entries = await entries.to_list(length=10)
     for entry in entries:
         if lang == "en":
-            if entry["vn"] != None:
-                results.append(entry)
+            if entry["vn"] != "":
+                results.append(schema(entry["id"], entry["en"], entry["vn"], entry["en_type"], entry["vn_type"]))
         if lang == "vn":
             if entry["en"] != None:
-                results.append(entry)
+                results.append(schema(entry["id"], entry["en"], entry["vn"], entry["en_type"], entry["vn_type"]))
     return results
 
 @router.get("/words/illustration/{id}", tags=["words"], status_code=200)
@@ -38,26 +71,21 @@ async def get_illustration_from_id(id: str):
     try:
         # get the file name at /var/www/images/ which has the pattern {id}.*
         file_name = glob.glob(f"/var/www/images/{id}.*")[0]
-        print(file_name)
         file_response = FileResponse(file_name)
     except: 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="image not found")
     return file_response
 
 @router.get("/words/sound/{lang}/{id}", tags=["words"], status_code=200)
-async def get_sound_from_id(lang: str, id: int):
+async def get_sound_from_id(lang: str, id: str):
     '''
     /words/sound/{lang}/{id} API, use for searching sound from the dictionary. (Frontend)
     ''' 
     if lang != "en" and lang != "vn":
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="lang must be either 'en' or 'vn'")
-    query = {"id": id}
-    print(query, lang)
-    entries = resources.dictionary_collection.find(query, limit=1)
-    # for entry in entries: 
-    #     print(entry["en"])
-    # if entry.itcount() == 0:
-    # return {"id": id, "lang": lang}
+    query = {"_id": ObjectId(id)}
+    entries = dictionary_collection.find(query, limit=1)
+    entries = await entries.to_list(length=1)
     try:
         entry = entries[0]
     except:
@@ -77,3 +105,42 @@ async def get_sound_from_id(lang: str, id: int):
             tts.save(file_path)
         file_response = FileResponse(file_path)
     return file_response
+
+@router.post("/words/suggestions", tags=["words"], status_code=200)
+async def add_suggestion(suggestion: WordSuggestion):
+    '''
+    /words/suggestions API, use for adding suggestion to the dictionary. (Frontend)
+    '''
+    # check if suggestion is already in the database/suggestions
+    query = {"suggestion": suggestion.suggestion}
+    entries = suggestions_collection.find(query, limit=1)
+    entries = await entries.to_list(length=1)
+    if len(entries) != 0:
+        raise HTTPException(status_code=status.HTTP_200_OK, detail="suggestion already exists")
+    
+    query = {f"{suggestion.lang}": suggestion.suggestion}
+    entries = dictionary_collection.find(query, limit=1)
+    entries = await entries.to_list(length=1)
+    if len(entries) != 0:
+        raise HTTPException(status_code=status.HTTP_200_OK, detail="suggestion already exists")
+    
+    # add suggestion to the database/suggestions
+    suggestion = loads(suggestion.model_dump_json())
+    print(suggestion)
+    suggestions_collection.insert_one(suggestion)
+    return {"message": "suggestion added"}
+
+@router.get("/words/suggestions", tags=["words"], status_code=200, dependencies=[Depends(api_key_auth)])
+async def get_suggestions():
+    '''
+    /words/suggestions API, use for getting suggestions from the dictionary. (Backend)
+    '''
+    results = []
+    entries = suggestions_collection.find()
+    entries = await entries.to_list(length=None)
+    # print(entries)
+    for entry in entries:
+        results.append({"suggestion": entry["suggestion"], "lang": entry["lang"]})
+    # remove all suggestions in the suggestions database
+    suggestions_collection.delete_many({})
+    return results

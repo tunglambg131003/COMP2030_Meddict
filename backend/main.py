@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os 
-from resources import words, pages
+from resources import words
 
 # switch origin based on environment
 if os.environ.get('PRODUCTION') == 'development':
@@ -30,4 +30,3 @@ app.add_middleware(
 )
 
 app.include_router(words.router)
-app.include_router(pages.router)
