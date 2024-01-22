@@ -21,5 +21,5 @@ jobs:
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       - name: Deploy to Product
         run: |
-          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 22 root@${{ secrets.SERVER_IP }} "cd /root/MedDict/COMP2030_Meddict && chmod +x ./deploy.sh && ./deploy.sh"
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no -p 22 root@${{ secrets.SERVER_IP }} "cd /root/MedDict/COMP2030_Meddict && git pull origin product && chmod +x ./deploy.sh && ./deploy.sh"
           echo "Deployed Successfully"
