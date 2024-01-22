@@ -8,14 +8,19 @@ import {
 import "../Styles/Navbar.css";
 import { Link } from "react-router-dom";
 import Logo from "../Assets/CHS_Logo.png"
+import LanguageSelector from "../Components/LanguageSelector"
+import { useTranslation } from 'react-i18next'
 
 function Navbar(props) {
   const [nav, setNav] = useState(false);
+  const { t } = useTranslation();
 
   const openNav = () => {
     setNav(!nav);
   };
- 
+  
+  
+  
   return (
     <div className="navbar-section" >
       <h1 className="navbar-title">
@@ -27,35 +32,30 @@ function Navbar(props) {
         {/* Desktop */}
       <ul className ="navbar-items" id="mainNav">
       
-        <li>
+        <li >
           <Link to="/" className = "navbar-links"> 
-            Home
+          {t("Home")}
           </Link>
         </li>
         <li>
           <a href="/contact" className="navbar-links" >
-            Contact
+          {t("Contact")}
           </a>
         </li>
         <li>
           <Link  to="/about" className="navbar-links" >
-            About us
+          {t("About")}
           </Link>
         </li>
         <li>
           <a href="/signin" className= "navbar-links">
-            Sign in 
+          {t("Sign in")}
           </a>
         </li>
         
       </ul>
       
-      <div class="select-dropdown" >
-        <select>
-        <option value="en" >English</option>
-        <option value="vi">Vietnamese</option>
-        </select>
-      </div>
+      <LanguageSelector/>
       
       {/* Mobile */}
       <div className={`mobile-navbar ${nav ? "open-nav" : ""}`}>
@@ -66,22 +66,22 @@ function Navbar(props) {
         <ul className="mobile-navbar-links" id = "mainNav_mobile">
           <li>
             <Link onClick={openNav} to="/">
-              Home
+            {t("Home")}
             </Link>
           </li>
           <li>
             <a onClick={openNav} href="/contact">
-              Contact
+            {t("Contact")}
             </a>
           </li>
           <li>
             <a onClick={openNav} href="/about">
-              About us
+            {t("About")}
             </a>
           </li>
           <li>
             <a onClick={openNav} href="/signin">
-              Sign in 
+            {t("Sign in")}
             </a>
           </li>
         </ul>

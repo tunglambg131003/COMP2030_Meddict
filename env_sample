@@ -4,8 +4,7 @@ MONGODB_PASSWORD="your_mongo_db_password"
 MONGODB_HOSTNAME="mongodb"
 MONGO_INITDB_ROOT_USERNAME="your_mongodb_root_username"
 MONGO_INITDB_ROOT_PASSWORD="your_mongodb_root_password"
-# google auth for admin endpoints
-GOOGLE_CLIENT_ID="your_google_client_id"
-GOOGLE_CLIENT_SECRET="your_google_client_secret"
 # production or development
 PRODUCTION="development"
+# api key for integration with GG Spreadsheet
+API_KEY="your_secret_key"
