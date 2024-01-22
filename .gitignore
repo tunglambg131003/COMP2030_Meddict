@@ -17,3 +17,4 @@ test_field/
 certbot/
 
 apps_script/.clasp.json
+apps_script/MedDict_Config.ts
