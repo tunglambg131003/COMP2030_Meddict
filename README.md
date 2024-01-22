@@ -17,12 +17,12 @@
 - Search for both English/Vietnamese medical words to receive the corresponding words in the other language. 
 - Provide sample illustrations to the words.
 - With the MedDict plugin, you can search for words directly from your browser!
+- Suggest words to the dictionary managers.
 
 ### For dictionary managers
 
-- Dashboard for managing the dictionary contents.
-- Quickly add new words to the dictionary via CSV or XLSX files.
-- Receive & resolve requests for new words from users. 
+- Integrated Dashboard to Google Spreadsheet, allowing dictionary managers to easily manage the dictionary directly from their familiar Google Spreadsheet interface.
+- Update/Delete, or resolve suggestions from end-users.
 
 ## 🧐 Usage 
 
@@ -41,6 +41,12 @@ More interestingly, you DON'T need to specify source/target language. The plugin
 ![Search with MedDict plugin](./images/search_plugin_en.png)
 
 ![Search with MedDict plugin](./images/search_plugin_vn.png)
+
+### For dictionary managers
+
+We have integrated a standalone Apps Script into the Google Spreadsheet of the project, which can support dictionary managers to easily manage the dictionary directly from their familiar Google Spreadsheet interface.
+
+![manager](./images/manager.png)
 
 ## 👨‍🔧 Installation 
 
