@@ -17,12 +17,12 @@
 - Search for both English/Vietnamese medical words to receive the corresponding words in the other language. 
 - Provide sample illustrations to the words.
 - With the MedDict plugin, you can search for words directly from your browser!
+- Suggest words to the dictionary managers.
 
 ### For dictionary managers
 
-- Dashboard for managing the dictionary contents.
-- Quickly add new words to the dictionary via CSV or XLSX files.
-- Receive & resolve requests for new words from users. 
+- Integrated Dashboard to Google Spreadsheet, allowing dictionary managers to easily manage the dictionary directly from their familiar Google Spreadsheet interface.
+- Update/Delete, or resolve suggestions from end-users.
 
 ## 🧐 Usage 
 
@@ -42,6 +42,12 @@ More interestingly, you DON'T need to specify source/target language. The plugin
 
 ![Search with MedDict plugin](./images/search_plugin_vn.png)
 
+### For dictionary managers
+
+We have integrated a standalone Apps Script into the Google Spreadsheet of the project, which can support dictionary managers to easily manage the dictionary directly from their familiar Google Spreadsheet interface.
+
+![manager](./images/manager.png)
+
 ## 👨‍🔧 Installation 
 
 ### Pre-requisite
@@ -49,6 +55,9 @@ More interestingly, you DON'T need to specify source/target language. The plugin
 Before installing the service, you need to have [Docker](https://docs.docker.com/) & [Docker Compose](https://docs.docker.com/compose/). Please visit their instalation guides before continuing. 
 
 ### Setup 
+
+#### MedDict Website
+
 1. Cloning the project with:
 ```bash
 $ git clone https://github.com/tunglambg131003/COMP2030_Meddict
@@ -60,8 +69,26 @@ $ git clone https://github.com/tunglambg131003/COMP2030_Meddict
 ```Bash
 $ docker compose up -d build
 ```
-
+5. Create 
 You are done! Access the service at `localhost` via your web browser if you are installing in local machine, or the server IP address/domain name if you are deploying it on a cloud instance.
+
+
+#### MedDict Apps Script plugin
+
+0. You should install [`clasp`](https://codelabs.developers.google.com/codelabs/clasp/#0) - The CLI tool for Google Apps Script.
+1. `Optional`: Create a new Google Spreadsheet, in which you follow the format of the original MedDict VinUni Project template.
+2. Open the Google Spreadsheet, and go to `Extensions` -> `Apps Script`. Collect the project ID of the project. `https://script.google.com/u/0/home/projects/<YOUR_PROJECT_ID_HERE>/`
+3. Run the following command 
+```bash
+clasp login # login into your SpreadSheet Account
+clasp clone $PROJECT_ID
+```
+4. Copy files from [apps_script](./apps_script/) folder. You can follow [this tutorial](https://developers.google.com/apps-script/guides/typescript) for using TypeScript during your development.
+5. Run the following command to push your changes to the Google Spreadsheet
+```bash
+clasp push
+```
+6. You are done! You can now automate your editing process with the Google Spreadsheet.
 
 ## 👩‍💻 Development
 

@@ -12,3 +12,9 @@ db.createUser(
 );
 
 db.createCollection("dictionary"); //MongoDB creates the database when you first store data in that database
+db.createCollection("suggestions");
+db.createCollection("users");
+
+db.users.insertOne({
+    "email": "<email_of_manager>",
+})

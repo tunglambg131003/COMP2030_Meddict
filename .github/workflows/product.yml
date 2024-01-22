@@ -1,0 +1,25 @@
+name: Auto deployment to production server 
+
+on:
+  push: 
+    branches:
+      - product
+  workflow_dispatch:
+
+jobs: 
+  deploy:
+    name: Deploy to Product server 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Setup SSH KEY
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_DEPLOYMENT_KEY }}" > ~/.ssh/id_ecdsa
+          chmod 600 ~/.ssh/id_ecdsa
+          ssh-keyscan -t id_ecdsa github.com >> ~/.ssh/known_hosts
+      - name: Deploy to Product
+        run: |
+          ssh -i ~/.ssh/id_ecdsa -o StrictHostKeyChecking=no -p 22 root@${{ secrets.SERVER_IP }} "cd /root/MedDict/COMP2030_MedDict && chmod +x ./deploy.sh && ./deploy.sh"
+          echo "Deployed Successfully"

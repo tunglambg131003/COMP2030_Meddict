@@ -69,8 +69,9 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: "${MONGO_INITDB_ROOT_PASSWORD}"
       # ME_CONFIG_MONGODB_URL: "mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/?authSource=admin"
       ME_CONFIG_MONGODB_SERVER: mongodb
-      ME_CONFIG_BASICAUTH_USERNAME: mexpress
-      ME_CONFIG_BASICAUTH_PASSWORD: mexpress
+      ME_CONFIG_BASICAUTH_USERNAME: "${MONGODB_USERNAME}"
+      ME_CONFIG_BASICAUTH_PASSWORD: "${MONGODB_PASSWORD}"
+      ME_CONFIG_SITE_BASEURL: "/database"
     networks:
       - backend 
     restart: unless-stopped 
@@ -104,7 +105,7 @@ services:
     volumes: 
       - ./certbot/www/:/var/www/certbot:rw 
       - ./certbot/conf/:/etc/letsencrypt/:rw
-
+      - letsencryptdata:/var/lib/letsencrypt
 networks:
   frontend:
     driver: bridge 
@@ -121,3 +122,5 @@ volumes:
     driver: local 
   nginx: 
     driver: local 
+  letsencryptdata:
+    driver: local
