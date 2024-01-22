@@ -8,3 +8,6 @@ MONGO_INITDB_ROOT_PASSWORD="your_mongodb_root_password"
 PRODUCTION="development"
 # api key for integration with GG Spreadsheet
 API_KEY="your_secret_key"
+# mexpress
+MEXPRESS_USERNAME="your_mexpress_account"
+MEXPRESS_PASSWORD="your_mexpress_password"
