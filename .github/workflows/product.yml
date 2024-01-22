@@ -16,9 +16,9 @@ jobs:
       - name: Setup SSH KEY
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_DEPLOYMENT_KEY }}" > ~/.ssh/id_ecdsa
-          chmod 600 ~/.ssh/id_ecdsa
-          ssh-keyscan -t id_ecdsa github.com >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_DEPLOYMENT_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
       - name: Deploy to Product
         run: |
           ssh -i ~/.ssh/id_ecdsa -o StrictHostKeyChecking=no -p 22 root@${{ secrets.SERVER_IP }} "cd /root/MedDict/COMP2030_MedDict && chmod +x ./deploy.sh && ./deploy.sh"
