@@ -1,8 +1,0 @@
-fastapi
-pymongo
-requests
-uvicorn
-python-multipart
-aiofiles
-gTTS
-motor
