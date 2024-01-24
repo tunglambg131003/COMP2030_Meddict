@@ -1,40 +1,11 @@
-// Compiled using undefined undefined (TypeScript 4.9.5)
-type Entry = {
-    worksheet_name: string;
-    col_coordinate: number;
-    row_coordinate: number;
-};
-
-function onEdit(e: any) {
-    // get rows, cols, sheet
-    // if exists -> update 
-    // if not exsits -> add in the last cols
-    let isOldValueUndefined: boolean = (e.oldValue == null);
-    let state: string = "UPDATE";
-    if (isOldValueUndefined) {
-        state = "INSERT";
-    }
-    // Lock for preventing concurrent access & update
-    const documentLock = LockService.getDocumentLock();
-    documentLock.tryLock(5000);
-    if (!documentLock.hasLock()) {
-        return;
-    }
-    try {
-        update_cache(state, e);
-    } catch (error) {
-        return "Error: " + error;
-    }
-    finally {
-        documentLock.releaseLock();
-    }
-}
-
 function update_cache(state: string, e: any) {
     const sheet = e.source;
     const worksheet_name = sheet.getActiveSheet().getName();
-    if (worksheet_name == "update_cache" || worksheet_name == "Suggestion") {
+    if (worksheet_name == "update_cache" || worksheet_name == "Guideline") {
         return;
+    }
+    if (worksheet_name == "Suggestion") {
+        handle_suggestion(e);
     }
     const worksheet = sheet.getSheetByName(worksheet_name);
     const coordinates = e.range;
@@ -47,7 +18,6 @@ function update_cache(state: string, e: any) {
     };
     // get (B, C, D, E, F) of the row
     Logger.log(row_coordinate);
-    Logger.log(typeof(row_coordinate))
     var content_range = worksheet.getRange(row_coordinate, 2, 1, 5);
     var content = content_range.getValues()[0];
     Logger.log(content);
@@ -65,7 +35,7 @@ function update_cache(state: string, e: any) {
             break;
         }
     }
-
+    Logger.log(index)
     var new_row = [state, entry.worksheet_name, '', content[0], content[1], content[2], content[3], content[4]];
     if (index == -1) {
         // add new row, with coordinates and content
@@ -87,45 +57,9 @@ function update_cache(state: string, e: any) {
     }
 }
 
-function renderJSON(){
-    // get all the rows in the cache
-    // render JSON 
-    const cache_sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("update_cache");
-    const last_row = cache_sheet.getLastRow();
-    const range = cache_sheet.getRange(5, 1, last_row - 3, 8);
-    const values = range.getValues();
-    const data = [];
-    for (var i = 0; i < values.length - 1; i++) {
-        const row = values[i];
-        const en = row[3];
-        const vn = row[4];
-        if (en == "" || vn == "") {
-            continue;
-        }
-        const entry = {
-            en: row[3],
-            vn: row[4],
-            en_type: row[5],
-            vn_type: row[6],
-            illustration: row[7]
-        };
-        data.push(entry);
-    }
-    const json = JSON.stringify(data);
-    Logger.log(json);
-
-    // clear cache
-    const cache_last_row = cache_sheet.getLastRow();
-    const cache_range = cache_sheet.getRange(5, 1, cache_last_row - 3, 8);
-    cache_range.clearContent();
-    // Logger.log("Cleared");
-    return json;
-}
-
 function submitToMedDictDB(){
     const user = Session.getActiveUser().getEmail();
     // check if user is in the whitelist ALLOWED_USERS
-
     if (ALLOWED_USERS.includes(user)){
         // MsgBox 
         const ui = SpreadsheetApp.getUi();
