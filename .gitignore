@@ -1,0 +1,20 @@
+# Ignore python cache
+*.pyc
+__pycache__/ 
+.env
+mongo-init.js
+dist/
+build/
+misc/.init.sh
+.dbinit.sh
+
+# node_modules
+node_modules/
+_deprecated/
+
+data/
+test_field/
+certbot/
+
+apps_script/.clasp.json
+apps_script/MedDict_Config.ts
