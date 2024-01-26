@@ -6,6 +6,7 @@ function update_cache(state: string, e: any) {
     }
     if (worksheet_name == "Suggestion") {
         handle_suggestion(e);
+        return;
     }
     const worksheet = sheet.getSheetByName(worksheet_name);
     const coordinates = e.range;
