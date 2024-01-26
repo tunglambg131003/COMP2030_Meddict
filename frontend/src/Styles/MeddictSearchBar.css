@@ -437,3 +437,69 @@ body {
   }
 }
 
+@media (max-width: 408px) {
+  .meddict-search {
+    width: 100%;
+    max-width: 390px;
+    margin: 0 auto;
+  }
+
+  .meddict-search input {
+    width: 100%;
+    max-width: 210px;
+  }
+
+  .result-container {
+    flex-direction: column;
+    height: auto;
+    margin-top: 50px;
+  }
+
+  .result-left,
+  .result-right {
+    width: 100%;
+  }
+
+  .result-image {
+    border-radius: 0;
+  }
+
+  .result-card {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  .meddict-search {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .meddict-search input {
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .result-container {
+    flex-direction: column;
+    height: auto;
+    margin-top: 50px;
+  }
+
+  .result-left,
+  .result-right {
+    width: 100%;
+  }
+
+  .result-image {
+    border-radius: 0;
+  }
+
+  .result-card {
+    max-width: 100%;
+  }
+}
+
+
+
