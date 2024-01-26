@@ -15,8 +15,14 @@ const SearchBar = () => {
   const [audioUrl_res, setAudioUrl_res] = useState('');
   const typingTimerRef = useRef(null);
   const showTimeRef = useRef(null);
+  const [showResultContainer, setShowResultContainer] = useState(false);
+  const googleSearchUrlRef = useRef("");
+  const wikiSearchUrlRef = useRef("");
+
+   
 
   useEffect(() => {
+
     // Section 1: Event Listeners and Variables
     const searchButton = document.getElementById('searchButton');
     const suggestionBox = document.getElementById('suggestionBox');
@@ -153,6 +159,10 @@ const SearchBar = () => {
       }
     }
 
+    
+
+  
+
     // Section 9: Click Event Listener for Search Button
     searchButton.addEventListener('click', function () {
       performSearch();
@@ -165,6 +175,8 @@ const SearchBar = () => {
       const inputCard = document.getElementById('inputCard');
       const resultCard = document.getElementById('resultCard');
       const interval = 1000;
+      
+      
 
       setImageUrl(null);
 
@@ -223,6 +235,11 @@ const SearchBar = () => {
                           setAudioUrl_res(audioUrl_res);
                         });
 
+                      googleSearchUrlRef.current = `https://www.google.com/search?q=${encodeURIComponent(inputValue)}`;
+
+                      wikiSearchUrlRef.current = `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(inputValue)}`
+                      setShowResultContainer(true)
+
                   } else {
                     // Section 13.5: If no matching user is found
                     inputCard.innerHTML = `${inputValue}`;
@@ -234,6 +251,14 @@ const SearchBar = () => {
                     // Show the result cards smoothly
                     inputCard.classList.add('show');
                     resultCard.classList.add('show');
+                    setShowResultContainer(true)
+
+                    googleSearchUrlRef.current = `https://www.google.com/search?q=${encodeURIComponent(inputValue)}`;
+                    wikiSearchUrlRef.current = `https://en.wikipedia.org/w/index.php?search=${encodeURIComponent(inputValue)}`
+
+                    
+
+
                   }
 
                   // Scroll into view
@@ -297,7 +322,13 @@ const SearchBar = () => {
                           const audioUrl_res = URL.createObjectURL(blob);
                           console.log(audioUrl_res);
                           setAudioUrl_res(audioUrl_res);
+                         
                         });
+
+                        googleSearchUrlRef.current = `https://www.google.com/search?q=${encodeURIComponent(inputValue)}`;
+                        wikiSearchUrlRef.current = `https://vi.wikipedia.org/w/index.php?search=${encodeURIComponent(inputValue)}`
+
+                    setShowResultContainer(true)
                   } else {
                     // Section 13.5: If no matching user is found
                     inputCard.innerHTML = `${inputValue}`;
@@ -309,6 +340,9 @@ const SearchBar = () => {
                     // Show the result cards smoothly
                     inputCard.classList.add('show');
                     resultCard.classList.add('show');
+                    googleSearchUrlRef.current = `https://www.google.com/search?q=${encodeURIComponent(inputValue)}`;
+                    wikiSearchUrlRef.current = `https://vi.wikipedia.org/w/index.php?search=${encodeURIComponent(inputValue)}`
+                    setShowResultContainer(true)
                   }
 
                   // Scroll into view
@@ -321,6 +355,8 @@ const SearchBar = () => {
       resetSearchInputStyle();
       selectedSuggestionIndex = -1;
     }
+
+   
   });
 
   // Section 14: Play audio
@@ -337,6 +373,18 @@ const SearchBar = () => {
       audio.play();
     }
   }
+
+  function handleButtonClick(){
+    
+      window.open(googleSearchUrlRef.current, '_blank');
+    
+  };
+
+  function handleButtonClick_1(){
+    
+    window.open(wikiSearchUrlRef.current, '_blank');
+  
+};
 
   // Section 15: Return JSX
   return (
@@ -396,8 +444,48 @@ const SearchBar = () => {
                   {t("illustration")}
                 </div>
             )}
+
+                
           </div>
+    
+
         </div>
+       
+        {showResultContainer && (
+         <div className = "button-container">
+        <button className="my-custom-button-1" style={{
+          padding: '15px', // Adjust padding for size
+          backgroundColor: '#D32727FF' , // Google's blue color
+          color: 'white', // Text color
+          border: 'none', // Remove border
+          borderRadius: '8px', // Rounded corners
+          cursor: 'pointer', // Show pointer cursor on hover
+          fontSize: '16px', // Adjust font size
+          fontWeight: 'bold', // Set font weight to bold
+          textTransform: 'uppercase', // Convert text to uppercase
+          marginRight: '25px',
+        }} onClick={handleButtonClick}>
+          GOOGLE
+        </button>
+
+        <button className="my-custom-button-2" style={{
+           padding: '15px',
+          backgroundColor: '#2E5288FF', // Google's blue color
+          color: 'white', // Text color
+          border: 'none', // Remove border
+          borderRadius: '8px', // Rounded corners
+          cursor: 'pointer', // Show pointer cursor on hover
+          fontSize: '16px', // Adjust font size
+          fontWeight: 'bold', // Set font weight to bold
+          textTransform: 'uppercase', // Convert text to uppercase
+        }} onClick={handleButtonClick_1}>
+          WIKIPEDIA
+        </button>
+        </div>
+      )}
+        
+
+        
       </div>
   );
 };
