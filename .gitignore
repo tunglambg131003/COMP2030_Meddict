@@ -12,9 +12,11 @@ misc/.init.sh
 node_modules/
 _deprecated/
 
+# sensitive data
 data/
 test_field/
 certbot/
 
+# apps_script sensitive data
 apps_script/.clasp.json
 apps_script/MedDict_Config.ts
