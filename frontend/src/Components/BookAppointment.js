@@ -14,6 +14,7 @@ function BookAppointment() {
   const { t } = useTranslation();
 
   const handleBookAppointmentClick = () => {
+    window.scrollTo(0, 0);
     navigate("/searchpage");
   };
 
