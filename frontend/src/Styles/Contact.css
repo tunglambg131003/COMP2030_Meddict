@@ -1,7 +1,7 @@
 .doctor-section {
     padding: 32px;
     text-align: center;
-    background: linear-gradient(to right, #ECF2FF, #FBFCFF);
+    background-color:white;
 }
 .dt-title-content {
     margin: 0 0 64px 0;
@@ -14,7 +14,7 @@
 }
 .dt-title > span {
     position: relative;
-  
+
 }
 .dt-title span::before {
     content: '';
@@ -61,7 +61,7 @@
     margin: 12px 0 0 0;
     font-size: 22px;
     font-weight: bold;
-    letter-spacing: .7px;   
+    letter-spacing: .7px;
 }
 .dt-card-phone {
     margin: 6px 0 8px;
