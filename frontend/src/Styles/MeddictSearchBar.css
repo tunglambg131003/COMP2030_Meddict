@@ -48,6 +48,51 @@ body {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  flex-grow: 1;
+  width: 800px;
+  height: 55px;
+  font-family: Inter, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 26px;
+  background: var(--background-color);
+  border: none;
+  border-color: var(--border-color);
+  outline: none;
+  box-shadow: 0 5px 15px dimgrey;
+  transition: width 0.1s ease-in-out;
+  margin-bottom: 10px;
+}
+
+.language-search {
+  position: relative;
+  width: 120px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Inter, sans-serif;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 26px;
+  color: #FFFFFF;
+  background: white;
+  opacity: 1;
+  border-right: 1px solid #BCC1CAFF;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.language-swap {
+  font-family: Inter, sans-serif;
+  color: #4d4f52;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  font-size: 19px;
+  text-align: center;
 }
 
 .meddict-search {
@@ -60,20 +105,17 @@ body {
 
 .meddict-search input {
   flex-grow: 1;
-  width: 745px;
-  height: 44px;
-  padding-left: 47px;
-  padding-right: 110px;
+  padding: 0 10px;
+  width: 400px;
+  height: 55px;
   font-family: Inter, sans-serif;
   font-size: 19px;
   font-weight: 400;
   line-height: 26px;
   background: var(--background-color);
-  border-radius: 22px;
   border: none;
   border-color: var(--border-color);
   outline: none;
-  box-shadow: 0 5px 15px gray;
   transition: width 0.1s ease-in-out;
 }
 
@@ -95,36 +137,10 @@ body {
   color: #BCC1CAFF;
 }
 
-.search-icon {
-  position: absolute;
-  left: 12px;
-  top: 11px;
-  height: 27px;
-  width: 29px;
-}
-
-.mic-icon,
-.cam-icon {
-  position: absolute;
-  top: 8px;
-  height: 34px;
-  cursor: pointer;
-}
-
-.mic-icon {
-  right: 72px;
-  width: 34px;
-}
-
-.cam-icon {
-  right: 20px;
-  width: 40px;
-}
-
 .meddict-button {
   position: relative;
-  width: 112px;
-  height: 49px;
+  width: 60px;
+  height: 55px;
   padding: 0 16px;
   display: flex;
   align-items: center;
@@ -136,21 +152,25 @@ body {
   color: #FFFFFF;
   background: var(--button-background);
   opacity: 1;
-  border: none;
-  border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 40px;
+  transition: background 0.3s, color 0.3s;
 }
 
 .meddict-button:hover {
+  color: var(--button-background);
+  background: white;
+  border-color: var(--button-background);
   filter: brightness(120%);
+  border-left: 1px solid gray;
 }
 
 .meddict-button:disabled {
   opacity: 0.4;
 }
 
-/* MeddictSearchBar.css */
+.meddict-button:hover .icon {
+  color: var(--button-background);
+}
 
 .suggestions {
   position: absolute;
@@ -159,7 +179,6 @@ body {
   right: 0;
   background-color: white;
   border-style: none;
-  border-radius: 0 0 22px 22px;
   box-shadow: 0 3px 3px gray;
   display: none;
   z-index: 1;
@@ -179,26 +198,21 @@ body {
 
 
 .suggestions::-webkit-scrollbar-thumb {
-  background-color: auto; /* Set your desired scrollbar thumb color */
-  border-radius: 6px; /* Set your desired scrollbar thumb border radius */
   top: 100%;
   left: 0;
   right: 0;
   border-style: none;
-  border-radius: 0 0 22px 22px;
   display: none;
   z-index: 1;
   padding-bottom: 20px;
 }
 
 .suggestions::-webkit-scrollbar-track {
-  background-color: white; /* Set your desired scrollbar track color */
-  border-radius: '6px'; /* Set your desired scrollbar track border radius */
+  background-color: white;
   top: 100%;
   left: 0;
   right: 0;
   border-style: none;
-  border-radius: 0 0 22px 22px;
   display: none;
   z-index: 1;
   padding-bottom: 20px;
@@ -207,12 +221,10 @@ body {
 .suggestion:hover {
   background-color: #d3d3d3;
   transition: background-color 0.2s ease;
-
 }
 
 .suggestion.selected {
   background-color: #d3d3d3;
-
 }
 
 .result-container {
@@ -328,26 +340,100 @@ body {
   background-color: #990000FF;
 }
 
-@media (max-width: 1000px) {
+
+@media (max-width: 768px) {
+  .meddict-search {
+    width: 100%;
+    max-width: 610px;
+    margin: 0 auto;
+  }
+
   .meddict-search input {
-    width: 600px;
-    transition: width 0.1s ease-in-out;
+    width: 100%;
+    max-width: 430px;
+  }
+
+  .result-container {
+    flex-direction: column;
+    height: auto;
+    margin-top: 50px;
+  }
+
+  .result-left,
+  .result-right {
+    width: 100%;
+  }
+
+  .result-image {
+    border-radius: 0;
+  }
+
+  .result-card {
+    max-width: 100%;
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: 618px) {
+  .meddict-search {
+    width: 100%;
+    max-width: 580px;
+    margin: 0 auto;
+  }
+
   .meddict-search input {
-    width: 400px;
-    transition: width 0.1s ease-in-out;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .result-container {
+    flex-direction: column;
+    height: auto;
+    margin-top: 50px;
+  }
+
+  .result-left,
+  .result-right {
+    width: 100%;
+  }
+
+  .result-image {
+    border-radius: 0;
+  }
+
+  .result-card {
+    max-width: 100%;
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 588px) {
+  .meddict-search {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
   .meddict-search input {
-    width: 200px;
-    transition: width 0.1s ease-in-out;
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .result-container {
+    flex-direction: column;
+    height: auto;
+    margin-top: 50px;
+  }
+
+  .result-left,
+  .result-right {
+    width: 100%;
+  }
+
+  .result-image {
+    border-radius: 0;
+  }
+
+  .result-card {
+    max-width: 100%;
   }
 }
-
-/* New styles for result container and cards */
 
