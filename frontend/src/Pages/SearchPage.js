@@ -1,11 +1,14 @@
 import React from "react";
 import SearchBar from "../Components/SearchBar";
-import ExNavbar from "../Components/ExternalNavBar";
+import Navbar from "../Components/Navbar";
 import Footer from "../Components/Footer";
 import {useState, useEffect} from "react";
 import "../Styles/ScrollUp.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {  faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import About from "../Components/About";
+import Contact from "../Components/Contact";
+
 
 function SearchPage() {
     const [goUp, setGoUp] = useState(false);
@@ -30,8 +33,10 @@ function SearchPage() {
 
   return(
       <div>
-        <ExNavbar />
+        <Navbar />
         <SearchBar />
+        <About/>
+        <Contact/>
           <Footer />
           <div
               onClick={scrollToTop}
