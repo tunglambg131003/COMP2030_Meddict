@@ -239,6 +239,7 @@ body {
   border: none;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
+  margin-bottom: 35px;
 }
 
 .result-container.show {
@@ -372,6 +373,14 @@ body {
     max-width: 100%;
   }
 }
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+
 
 @media (max-width: 618px) {
   .meddict-search {
