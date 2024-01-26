@@ -52,7 +52,7 @@ function Hero() {
           </button>
           <div className="text-stats">
             <div className="text-stats-container">
-              <p>13,000+</p>
+              <p>50,000+</p>
               <p>{t("H4")}</p>
             </div>
 
