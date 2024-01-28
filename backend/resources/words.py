@@ -148,12 +148,16 @@ async def update_words(word_list: WordList):
     Please refer the schema at the documentation.
     '''
     entries = word_list.words
-    for entry in entries:
-        query = {"$or": [{"en": entry.en}, {"vn": entry.vn}]}
-        entries = dictionary_collection.find(query, limit=1)
-        entries = await entries.to_list(length=1)
-        if len(entries) == 0:
-            dictionary_collection.insert_one(entry.dict())
-        else:
-            new_values = {"$set": entry.dict()}
-            dictionary_collection.update_one(query, new_values, upsert=True)
+    try:
+        for entry in entries:
+            query = {"$or": [{"en": entry.en}, {"vn": entry.vn}]}
+            entries = dictionary_collection.find(query, limit=1)
+            entries = await entries.to_list(length=1)
+            if len(entries) == 0:
+                dictionary_collection.insert_one(entry.dict())
+            else:
+                new_values = {"$set": entry.dict()}
+                dictionary_collection.update_one(query, new_values, upsert=True)
+    except:
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid request")
+    return HTTPException(status_code=status.HTTP_200_OK, detail="words updated")
