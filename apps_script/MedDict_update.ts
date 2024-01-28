@@ -78,7 +78,6 @@ function submitToMedDictDB(){
         }
         catch (err) {
             Logger.log(err);
-        
         }
     }
     else {

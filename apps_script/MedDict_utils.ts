@@ -26,9 +26,9 @@ function renderJSON(){
     Logger.log(json);
 
     // clear cache
-    const cache_last_row = cache_sheet.getLastRow();
-    const cache_range = cache_sheet.getRange(5, 1, cache_last_row - 3, 8);
-    cache_range.clearContent();
+    // const cache_last_row = cache_sheet.getLastRow();
+    // const cache_range = cache_sheet.getRange(5, 1, cache_last_row - 3, 8);
+    // cache_range.clearContent();
     // Logger.log("Cleared");
     return json;
 }
