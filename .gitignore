@@ -1,5 +1,6 @@
 # Ignore python cache
 *.pyc
+.pytest_cache/
 __pycache__/ 
 .env
 mongo-init.js

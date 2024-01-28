@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      MONGODB_DATABASE: "MedDict"
+      MONGODB_DATABASE: "${MONGODB_DATABASE}"
       MONGODB_USERNAME: "${MONGODB_USERNAME}"
       MONGODB_PASSWORD: "${MONGODB_PASSWORD}"
       MONGODB_HOSTNAME: "${MONGODB_HOSTNAME}"
