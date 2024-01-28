@@ -167,8 +167,7 @@ async def update_words(word_list: WordList):
                 new_values = {"$set": entry.dict()}
                 dictionary_collection.update_one(query, new_values, upsert=True)
             if entry.illustration != "":
-                if not await if_exists_image(_id):
-                    await download_image(_id, entry.illustration)
+                await download_image(_id, entry.illustration)
     except:
         return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid request")
     return HTTPException(status_code=status.HTTP_200_OK, detail="words updated")
