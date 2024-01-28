@@ -18,17 +18,16 @@ function renderJSON(){
             vn: row[4],
             en_type: row[5],
             vn_type: row[6],
-            illustration: row[7]
+            // illustration: row[7]
         };
         data.push(entry);
     }
-    const json = JSON.stringify(data);
-    Logger.log(json);
+    // const json = JSON.stringify(data);
 
     // clear cache
-    // const cache_last_row = cache_sheet.getLastRow();
-    // const cache_range = cache_sheet.getRange(5, 1, cache_last_row - 3, 8);
-    // cache_range.clearContent();
-    // Logger.log("Cleared");
-    return json;
+    const cache_last_row = cache_sheet.getLastRow();
+    const cache_range = cache_sheet.getRange(5, 1, cache_last_row - 3, 8);
+    cache_range.clearContent();
+    Logger.log("Cleared");
+    return data;
 }

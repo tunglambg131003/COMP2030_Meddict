@@ -58,6 +58,28 @@ function update_cache(state: string, e: any) {
     }
 }
 
+function pushToMedDictDB(payload){
+    let headers = {
+        "Authorization": "Bearer " + API_KEY,
+    };
+
+    let request_body = {"words": payload};
+    Logger.log(JSON.stringify(request_body))
+    let options = {
+        method: 'post',
+        headers: headers, 
+        contentType: 'application/json',
+        payload: JSON.stringify(request_body),
+    }
+    let response = UrlFetchApp.fetch("https://api.meddict-vinuni.com/words/update", options);
+    if (response.getResponseCode() != 200) {
+        Logger.log("Error");
+        Logger.log(response.getContentText());
+        return;
+    }
+    Logger.log("Success");
+}
+
 function submitToMedDictDB(){
     const user = Session.getActiveUser().getEmail();
     // check if user is in the whitelist ALLOWED_USERS
@@ -69,6 +91,8 @@ function submitToMedDictDB(){
         try {
             if (response == ui.Button.YES) {
                 // User clicked "Yes".
+                const updated_words = renderJSON();
+                pushToMedDictDB(updated_words);
                 Logger.log("Submit to MedDict DB");
             } else {
                 // User clicked "No" or X in the title bar.
