@@ -18,7 +18,7 @@ function renderJSON(){
             vn: row[4],
             en_type: row[5],
             vn_type: row[6],
-            // illustration: row[7]
+            illustration: row[7]
         };
         data.push(entry);
     }
