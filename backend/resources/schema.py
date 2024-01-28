@@ -9,6 +9,7 @@ class Word(BaseModel):
     vn: str
     en_type: str
     vn_type: str
+    illustration: str
 
 class WordList(BaseModel):
     words: list[Word]
