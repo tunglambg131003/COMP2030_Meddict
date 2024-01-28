@@ -66,13 +66,19 @@ function submitToMedDictDB(){
         const ui = SpreadsheetApp.getUi();
         const response = ui.alert('Submit to MedDict DB', 'Are you sure you want to submit?', ui.ButtonSet.YES_NO);
         // Process the user's response.
-        if (response == ui.Button.YES) {
-            // User clicked "Yes".
-            Logger.log("Submit to MedDict DB");
-        } else {
-            // User clicked "No" or X in the title bar.
-            Logger.log("Cancel");
-            return;
+        try {
+            if (response == ui.Button.YES) {
+                // User clicked "Yes".
+                Logger.log("Submit to MedDict DB");
+            } else {
+                // User clicked "No" or X in the title bar.
+                Logger.log("Cancel");
+                return;
+            }
+        }
+        catch (err) {
+            Logger.log(err);
+        
         }
     }
     else {
