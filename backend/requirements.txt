@@ -6,3 +6,5 @@ python-multipart
 aiofiles
 gTTS
 motor
+pillow
+python-resize-image

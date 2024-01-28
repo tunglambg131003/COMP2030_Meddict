@@ -1,15 +1,16 @@
 from fastapi import APIRouter, Query, status, HTTPException, Depends
 from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordBearer
-
-import glob
-from resources import dictionary_collection, users_collection, suggestions_collection
 import gtts
 from os import path, environ
+import glob
 from bson import ObjectId
-
-from resources.schema import WordSuggestion, WordList
 from json import loads
+
+from resources import dictionary_collection, users_collection, suggestions_collection
+from resources.schema import WordSuggestion, WordList
+
+from resources.utils import if_exists_image, download_image
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
@@ -150,14 +151,24 @@ async def update_words(word_list: WordList):
     entries = word_list.words
     try:
         for entry in entries:
+            # update word to the database/dictionary
             query = {"$or": [{"en": entry.en}, {"vn": entry.vn}]}
             entries = dictionary_collection.find(query, limit=1)
             entries = await entries.to_list(length=1)
+            _id = ""
             if len(entries) == 0:
-                dictionary_collection.insert_one(entry.dict())
+                payload = {"en": entry.en, "vn": entry.vn, "en_type": entry.en_type, "vn_type": entry.vn_type}
+                resobj = await dictionary_collection.insert_one(payload)
+                _id = str(resobj.inserted_id)
+                print("inserted", _id)
             else:
+                _id = entries[0]["_id"]
+                print("found", _id)
                 new_values = {"$set": entry.dict()}
                 dictionary_collection.update_one(query, new_values, upsert=True)
+            if entry.illustration != "":
+                if not await if_exists_image(_id):
+                    await download_image(_id, entry.illustration)
     except:
         return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid request")
     return HTTPException(status_code=status.HTTP_200_OK, detail="words updated")
