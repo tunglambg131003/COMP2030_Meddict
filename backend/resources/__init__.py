@@ -1,6 +1,5 @@
 import os
 import motor.motor_asyncio
-from typing import List
  
 # debug code. import the env variables from .env file
 # from dotenv import load_dotenv

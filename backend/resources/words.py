@@ -1,23 +1,22 @@
 from fastapi import APIRouter, Query, status, HTTPException, Depends
 from fastapi.responses import FileResponse
 from fastapi.security import OAuth2PasswordBearer
-import glob
-from resources import dictionary_collection, users_collection, suggestions_collection
 import gtts
 from os import path, environ
+import glob
 from bson import ObjectId
-from pydantic import BaseModel 
 from json import loads
+
+from resources import dictionary_collection, users_collection, suggestions_collection
+from resources.schema import WordSuggestion, WordList
+
+from resources.utils import if_exists_image, download_image
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 def api_key_auth(api_key: str = Depends(oauth2_scheme)):
     if api_key != environ["API_KEY"]:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid api key")
-
-class WordSuggestion(BaseModel):
-    suggestion: str
-    lang: str
 
 def schema(id: ObjectId, en: str, vn: str, en_type: str, vn_type: str):
     '''
@@ -126,7 +125,7 @@ async def add_suggestion(suggestion: WordSuggestion):
     
     # add suggestion to the database/suggestions
     suggestion = loads(suggestion.model_dump_json())
-    print(suggestion)
+    # print(suggestion)
     suggestions_collection.insert_one(suggestion)
     return {"message": "suggestion added"}
 
@@ -138,9 +137,37 @@ async def get_suggestions():
     results = []
     entries = suggestions_collection.find()
     entries = await entries.to_list(length=None)
-    # print(entries)
     for entry in entries:
         results.append({"suggestion": entry["suggestion"], "lang": entry["lang"]})
-    # remove all suggestions in the suggestions database
     suggestions_collection.delete_many({})
     return results
+
+@router.post("/words/update", tags=["words"], status_code=200, dependencies=[Depends(api_key_auth)])
+async def update_words(word_list: WordList):
+    '''
+    /words/update API, use for updating/adding words to the dictionary. (Backend)
+    Please refer the schema at the documentation.
+    '''
+    entries = word_list.words
+    try:
+        for entry in entries:
+            # update word to the database/dictionary
+            query = {"$or": [{"en": entry.en}, {"vn": entry.vn}]}
+            entries = dictionary_collection.find(query, limit=1)
+            entries = await entries.to_list(length=1)
+            _id = ""
+            if len(entries) == 0:
+                payload = {"en": entry.en, "vn": entry.vn, "en_type": entry.en_type, "vn_type": entry.vn_type}
+                resobj = await dictionary_collection.insert_one(payload)
+                _id = str(resobj.inserted_id)
+                print("inserted", _id)
+            else:
+                _id = entries[0]["_id"]
+                print("found", _id)
+                new_values = {"$set": entry.dict()}
+                dictionary_collection.update_one(query, new_values, upsert=True)
+            if entry.illustration != "":
+                await download_image(_id, entry.illustration)
+    except:
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid request")
+    return HTTPException(status_code=status.HTTP_200_OK, detail="words updated")
