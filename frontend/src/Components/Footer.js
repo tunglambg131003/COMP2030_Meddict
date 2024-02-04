@@ -16,7 +16,7 @@ function Footer() {
       <div className="footer-section" id = "footer">
         <div className="footer-container">
           <div className="footer-col1">
-            <Link to = "/" onClick="reload">
+            <Link to = "/" onclick="reloadPage()">
               <img src = {Footer_Logo}  alt = "Footer_Logo"/>
             </Link>
           </div>
